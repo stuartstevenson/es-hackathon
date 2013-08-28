@@ -25,6 +25,10 @@
 			<email>carlos.rodriguez@rightmove.co.uk</email>
 			<name>Carlos Rodriguez</name>
 		</developer>
+		<developer>
+			<email>fergusstrange@gmail.com</email>
+			<name>Fergus Strange</name>
+		</developer>
 	</developers>
 
 	<dependencies>
