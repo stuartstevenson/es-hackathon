@@ -18,7 +18,7 @@
 		ignore-unresolvable="false" />
 
 	<context:component-scan base-package="com.rightmove.es">
-		<!-- <context:exclude-filter type="com.rightmove.es.controller" expression=""/> -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
 	<task:annotation-driven/>

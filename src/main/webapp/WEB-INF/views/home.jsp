@@ -1,11 +1,17 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%-- <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%> --%>
-<%-- <%@ taglib prefix="t" uri="http://tiles.apache.org/tags-tiles"%> --%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-home.jsp
-<p>
-Now: <fmt:formatDate value="${now}" pattern="hh:mm:ss a MMM d, yyyy" />
-
-<p>
-Games: ${games}
+<!doctype html>
+<html>
+	<head>
+		<title>Rightmove elastic search</title>
+		<link rel="stylesheet" href="/resources/css/bootstrap.css">
+		<link rel="stylesheet" href="/resources/css/bootstrap-theme.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>Rightmove elastic search</h1>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
