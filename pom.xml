@@ -12,6 +12,13 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<developers>
+		<developer>
+			<email>stuart.stevenson@rightmove.co.uk</email>
+			<name>Stuart Stevenson</name>
+		</developer>
+	</developers>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
