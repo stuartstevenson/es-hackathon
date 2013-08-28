@@ -21,6 +21,10 @@
 			<email>james.a.pace@gmail.com</email>
 			<name>James Pace</name>
 		</developer>
+		<developer>
+			<email>carlos.rodriguez@rightmove.co.uk</email>
+			<name>Carlos Rodriguez</name>
+		</developer>
 	</developers>
 
 	<dependencies>
