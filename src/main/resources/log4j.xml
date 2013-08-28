@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//LOGGER" "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%p]%d{HH:mm:ss,SSS}-%c:%L - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="warn" />
+	</logger>
+
+	<logger name="org.springframework.beans">
+		<level value="warn" />
+	</logger>
+
+	<logger name="org.springframework.context">
+		<level value="warn" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="warn" />
+	</logger>
+	
+	<!-- TODO some logs are missing -->
+	
+	<logger name="poc">
+		<level value="info" />
+	</logger>
+	
+	<!-- Root Logger -->
+	<root>
+		<priority value="warn" />
+		<appender-ref ref="stdout" />
+	</root>
+
+</log4j:configuration>

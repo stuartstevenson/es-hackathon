@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="es-hackathon:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="es-hackathon-1.0.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="es-hackathon:war exploded" />
+    </root>
+  </artifact>
+</component>
