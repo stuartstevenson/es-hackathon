@@ -17,6 +17,10 @@
 			<email>stuart.stevenson@rightmove.co.uk</email>
 			<name>Stuart Stevenson</name>
 		</developer>
+		<developer>
+			<email>james.a.pace@gmail.com</email>
+			<name>James Pace</name>
+		</developer>
 	</developers>
 
 	<dependencies>
