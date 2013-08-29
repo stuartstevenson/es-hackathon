@@ -42,7 +42,6 @@ public class GameController {
 	public @ResponseBody
 	Collection<GameDto> listAll() {
 		Collection<Game> games = gameService.listAll();
-		games = new ArrayList<Game>();
 		return gameDtoConverter.convert(games);
 	}
 }

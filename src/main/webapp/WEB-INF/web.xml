@@ -5,7 +5,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:game-score.xml</param-value>
+		<param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
 
 	<listener>
@@ -13,14 +13,14 @@
 	</listener>
 
 	<servlet>
-		<servlet-name>game-score</servlet-name>
+		<servlet-name>es-property</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<!-- automatically loads game-score-servlet.xml -->
-		<servlet-name>game-score</servlet-name>
+		<servlet-name>es-property</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
