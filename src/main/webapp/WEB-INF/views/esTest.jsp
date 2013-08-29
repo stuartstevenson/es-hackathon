@@ -12,6 +12,9 @@
 					<h1>Rightmove elastic search test page</h1>
 				</div>
 			</div>
+			<div class="row">
+			    ${result}
+			</div>
 		</div>
 	</body>
 </html>
