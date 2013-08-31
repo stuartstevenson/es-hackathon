@@ -1,0 +1,50 @@
+package com.rightmove.es.controller;
+
+import com.rightmove.es.dao.PropertyDao;
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.repositories.PropertyRepository;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Collection;
+
+@Controller
+public class ESTestController {
+
+    private Logger log = Logger.getLogger(HomeController.class);
+
+    @Autowired
+    private PropertyRepository propertyRepository;
+    @Autowired
+    private PropertyDao propertyDao;
+
+    @RequestMapping("/es-test")
+    public String showESTestPage(final ModelMap modelMap) {
+
+        indexDummyData();
+
+        modelMap.addAttribute("result",searchDummyData());
+
+        log.debug("estest");
+        return "esTest";
+    }
+
+    private String searchDummyData() {
+       Page<Property> properties = propertyRepository.findAll(new PageRequest(0, 10));
+
+       return properties.getContent().toString();
+    }
+
+    private void indexDummyData() {
+        Collection<Property> properties = propertyDao.listAll();
+
+        propertyRepository.save(properties);
+    }
+
+
+}

@@ -28,9 +28,7 @@
 		<level value="warn" />
 	</logger>
 	
-	<!-- TODO some logs are missing -->
-	
-	<logger name="poc">
+	<logger name="com.rightmove">
 		<level value="info" />
 	</logger>
 	
