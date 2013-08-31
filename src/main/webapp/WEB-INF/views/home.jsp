@@ -1,17 +1,24 @@
-<!doctype html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="jsDir" value="${pageContext.request.contextPath}/resources/js" />
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>Rightmove elastic search</title>
-		<link rel="stylesheet" href="/resources/css/bootstrap.css">
-		<link rel="stylesheet" href="/resources/css/bootstrap-theme.css">
+		<title>Rightmove Elastic Search</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" media="screen" href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
+		<link rel="stylesheet" media="screen" href="${pageContext.request.contextPath}/resources/css/bootstrap-theme.css">
+		<link rel="stylesheet" media="screen" href="${pageContext.request.contextPath}/resources/css/main.css">
 	</head>
 	<body>
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12">
-					<h1>Rightmove elastic search</h1>
+				<div class="col-xs-12 text-center">
+					<h1>Rightmove Elastic Search</h1>
 				</div>
 			</div>
+			<div class="row" id="headerRegion"></div>
+			<div class="row" id="resultRegion"></div>
 		</div>
+		<script data-main="${jsDir}/main" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.js"></script>
 	</body>
 </html>
