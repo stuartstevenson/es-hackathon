@@ -1,10 +1,17 @@
 package com.rightmove.es.domain;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.elasticsearch.annotations.Document;
 
+@Document(indexName = "property-search-index", type = "rm-property")
 public class Property {
 
+    @Id
 	private Long id;
+    @Version
+    private Long version;
 	private String incode;
 	private String outcode;
 	private String summary;
@@ -15,7 +22,16 @@ public class Property {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getIncode() {
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public String getIncode() {
 		return incode;
 	}
 	public void setIncode(String incode) {
