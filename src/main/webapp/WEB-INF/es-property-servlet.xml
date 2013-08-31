@@ -22,6 +22,10 @@
 
     <es:repositories base-package="com.rightmove.es.repositories"/>
 
+    <bean name="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+        <constructor-arg name="client" ref="client"/>
+    </bean>
+
 	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
 	<mvc:resources mapping="/favicon.ico" location="/WEB-INF/resources/image/favicon.ico"/>
 
