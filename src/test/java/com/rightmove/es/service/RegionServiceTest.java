@@ -21,9 +21,6 @@ public class RegionServiceTest {
     public void loadAndIndexRegions() throws Exception{
         regionService.loadAndIndexRegions();
 
-        //seems to be slow at indexing all the records. with a pause the match all query eventually catches up
-        Thread.sleep(3000);
-
         assertEquals("Expect 10 regions to be indexed", 10l, regionService.listAll());
     }
 }

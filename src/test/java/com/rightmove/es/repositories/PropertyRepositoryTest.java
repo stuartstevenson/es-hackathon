@@ -14,7 +14,7 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/springContext-test.xml")
+@ContextConfiguration("classpath:/applicationContext.xml")
 public class PropertyRepositoryTest {
 
     @Autowired

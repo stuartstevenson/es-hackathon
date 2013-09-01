@@ -8,6 +8,8 @@ import com.vividsolutions.jts.geom.Polygon;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -30,11 +32,17 @@ public class RegionServiceImpl implements RegionService {
     private RegionDao regionDao;
 
     public void loadAndIndexRegions() {
-        createIndex();
 
-        for (Region region : regionDao.listAll()) {
-            indexRegion(region);
-        }
+	    BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
+
+	    for(Region region : regionDao.listAll()) {
+		    bulkRequestBuilder.add(new IndexRequest("region-index", "region",
+				    String.valueOf(id++)).source(indexRegion(region)));
+	    }
+
+	    if(bulkRequestBuilder.execute().actionGet().hasFailures()) {
+		    throw new RuntimeException();
+	    }
     }
 
     @Override
@@ -68,10 +76,9 @@ public class RegionServiceImpl implements RegionService {
         }
     }
 
-    private void indexRegion(Region region) {
-        try {
+    private String indexRegion(Region region) {
 
-            String json = "{" +
+           return "{" +
                     "\"name\":\""+region.getName()+"\"," +
                     "\"polygon\": {" +
                     "\"type\":\"polygon\"," +
@@ -80,16 +87,6 @@ public class RegionServiceImpl implements RegionService {
                     "]]" +
                     "}" +
                     "}";
-
-
-            client.prepareIndex("region-index", "region", ""+id++).setSource(json).execute().actionGet();
-
-            log.debug("index object: "+region.getName());
-
-        } catch (Exception e) {
-            log.debug("failed to index object:"+region.getName());
-            // ignore
-        }
     }
 
     private String getCoordinates(Polygon polygon) {
