@@ -3,7 +3,6 @@ package com.rightmove.es.controller;
 import com.rightmove.es.dao.PropertyDao;
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.repositories.PropertyRepository;
-import com.rightmove.es.service.PropertyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,7 @@ public class ESTestController {
     @Autowired
     private PropertyRepository propertyRepository;
     @Autowired
-    private PropertyService propertyService;
+    private PropertyDao propertyDao;
 
     @RequestMapping("/es-test")
     public String showESTestPage(final ModelMap modelMap) {
@@ -42,7 +41,7 @@ public class ESTestController {
     }
 
     private void indexDummyData() {
-        Collection<Property> properties = propertyService.listAll();
+        Collection<Property> properties = propertyDao.listAll();
 
         propertyRepository.save(properties);
     }
