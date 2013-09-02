@@ -1,5 +1,6 @@
 package com.rightmove.es.service;
 
+import org.elasticsearch.common.geo.ShapeBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,17 @@ public class RegionServiceTest {
         Thread.sleep(1000);
         
         assertEquals("Expect 10 regions to be indexed", 10l, regionService.listAll());
+
 		assertEquals("Expect 2 regions to be returned", 2l, regionService.listAllByPoint(75,75));
-    }
+
+		ShapeBuilder.PolygonBuilder polygonBuilder = ShapeBuilder.newPolygon();
+
+		polygonBuilder.point(25, 25)
+				.point(25, 125)
+				.point(125, 125)
+				.point(125, 25);
+
+		assertEquals("Expect 1 region to be returned", 1l, regionService.listAllByPolygon(polygonBuilder.build()));
+
+	}
 }

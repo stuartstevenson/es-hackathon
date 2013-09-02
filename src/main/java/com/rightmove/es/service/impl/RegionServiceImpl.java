@@ -4,10 +4,10 @@ import com.rightmove.es.dao.RegionDao;
 import com.rightmove.es.domain.Region;
 import com.rightmove.es.service.RegionService;
 import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.shape.Shape;
 import com.spatial4j.core.shape.impl.PointImpl;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Polygon;
-import org.apache.log4j.Logger;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -65,6 +65,17 @@ public class RegionServiceImpl implements RegionService {
 				.setTypes("region")
 				.setQuery(QueryBuilders.matchAllQuery())
 				.setFilter(FilterBuilders.geoShapeFilter("polygon", new PointImpl(x, y, SpatialContext.GEO), ShapeRelation.INTERSECTS))
+				.execute().actionGet();
+		return searchResponse.getHits().getTotalHits();
+	}
+
+	@Override
+	public long listAllByPolygon(Shape polygon) {
+
+		SearchResponse searchResponse = client.prepareSearch("region-index")
+				.setTypes("region")
+				.setQuery(QueryBuilders.matchAllQuery())
+				.setFilter(FilterBuilders.geoShapeFilter("polygon", polygon, ShapeRelation.WITHIN))
 				.execute().actionGet();
 		return searchResponse.getHits().getTotalHits();
 	}
