@@ -21,16 +21,14 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 @Component
 public class RegionServiceImpl implements RegionService {
 
-    private static Logger log = Logger.getLogger(RegionService.class);
-
     private static Integer id =1;
-
 
     @Autowired
     private Client client;
     @Autowired
     private RegionDao regionDao;
 
+    @Override
     public void loadAndIndexRegions() {
 
 	    BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();

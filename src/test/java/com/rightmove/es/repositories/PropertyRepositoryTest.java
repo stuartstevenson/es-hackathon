@@ -1,7 +1,9 @@
 package com.rightmove.es.repositories;
 
-import com.rightmove.es.dao.PropertyDao;
-import com.rightmove.es.domain.Property;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collection;
-
-import static org.junit.Assert.assertEquals;
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.service.PropertyService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
@@ -19,10 +20,13 @@ public class PropertyRepositoryTest {
 
     @Autowired
     private PropertyRepository propertyRepository;
+    
+    @Autowired
+    private PropertyService propertyService;
 
     @Test
     public void indexAndRetrieveRows() {
-        Collection<Property> propertyCollection = new PropertyDao().listAll();
+        Collection<Property> propertyCollection = propertyService.listAll();
 
         propertyRepository.save(propertyCollection);
 
