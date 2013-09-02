@@ -11,8 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.rightmove.es.dataprovider.PropertyDataProvider;
 import com.rightmove.es.domain.Property;
-import com.rightmove.es.service.PropertyService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
@@ -22,7 +22,7 @@ public class PropertyRepositoryTest {
     private PropertyRepository propertyRepository;
     
     @Autowired
-    private PropertyService propertyService;
+    private PropertyDataProvider propertyService;
 
     @Test
     public void indexAndRetrieveRows() {

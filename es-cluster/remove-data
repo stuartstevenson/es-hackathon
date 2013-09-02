@@ -1,0 +1,5 @@
+rm -rf elasticsearch1/data
+rm -rf elasticsearch2/data
+rm -rf elasticsearch3/data
+rm -rf elasticsearch4/data
+rm -rf elasticsearch5/data

@@ -1,0 +1,25 @@
+- How to use
+
+1 - In applicationConfig.xml
+	replace	<es:node-client id="client" local="true"/>
+	with	<es:transport-client id="client" cluster-nodes="localhost:9300" />
+
+2 - create 5 copies of elasticsearch and use the config/elasticsearch.yml files
+
+3 - start all 5 instances, they will recognize each other
+
+
+- How it works
+
+- elasticsearch1: can do any work (master true, data true)
+- elasticsearch2: coordinator (master true, data false)
+- elasticsearch3: workhorse (master false, data true)
+- elasticsearch4: workhorse (master false, data true)
+- elasticsearch5: fetching results and load balancing (master false, data false)
+
+# cluster health
+http://localhost:9200/_cluster/health
+
+# search
+http://localhost:9200/property-search-index/_search
+

@@ -12,9 +12,9 @@
 		http://www.springframework.org/schema/data/elasticsearch
         http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
 
-	<!--<es:transport-client id="client" cluster-nodes="localhost:9300"/>-->
-
+	<!-- Alternate between these 2 lines to use a remote/local ES. Nothing else needs to be changed. --> 
 	<es:node-client id="client" local="true"/>
+	<!-- <es:transport-client id="client" cluster-nodes="localhost:9300" /> -->
 
 	<es:repositories base-package="com.rightmove.es.repositories"/>
 

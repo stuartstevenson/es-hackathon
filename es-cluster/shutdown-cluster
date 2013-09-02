@@ -1,0 +1,5 @@
+kill -9 `cat pid1`
+kill -9 `cat pid2`
+kill -9 `cat pid3`
+kill -9 `cat pid4`
+kill -9 `cat pid5`

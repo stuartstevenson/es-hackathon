@@ -1,0 +1,5 @@
+./elasticsearch1/bin/elasticsearch -p pid1
+./elasticsearch2/bin/elasticsearch -p pid2
+./elasticsearch3/bin/elasticsearch -p pid3
+./elasticsearch4/bin/elasticsearch -p pid4
+./elasticsearch5/bin/elasticsearch -p pid5

@@ -1,13 +1,7 @@
 package com.rightmove.es.service.impl;
 
-import com.rightmove.es.dao.RegionDao;
-import com.rightmove.es.domain.Region;
-import com.rightmove.es.service.RegionService;
-import com.spatial4j.core.context.SpatialContext;
-import com.spatial4j.core.shape.Shape;
-import com.spatial4j.core.shape.impl.PointImpl;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Polygon;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -20,7 +14,14 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import com.rightmove.es.dataprovider.RegionDataProvider;
+import com.rightmove.es.domain.Region;
+import com.rightmove.es.service.RegionService;
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.shape.Shape;
+import com.spatial4j.core.shape.impl.PointImpl;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Polygon;
 
 @Component
 public class RegionServiceImpl implements RegionService {
@@ -30,7 +31,7 @@ public class RegionServiceImpl implements RegionService {
     @Autowired
     private Client client;
     @Autowired
-    private RegionDao regionDao;
+    private RegionDataProvider regionDataProvider;
 
     @Override
     public void loadAndIndexRegions() {
@@ -39,7 +40,7 @@ public class RegionServiceImpl implements RegionService {
 
 		createIndex();
 
-	    for(Region region : regionDao.listAll()) {
+	    for(Region region : regionDataProvider.listAll()) {
 		    bulkRequestBuilder.add(new IndexRequest("region-index", "region",
 				    String.valueOf(id++)).source(indexRegion(region)));
 	    }
