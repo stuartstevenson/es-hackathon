@@ -3,6 +3,8 @@ package com.rightmove.es.service.impl;
 import com.rightmove.es.dao.RegionDao;
 import com.rightmove.es.domain.Region;
 import com.rightmove.es.service.RegionService;
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.shape.impl.PointImpl;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Polygon;
 import org.apache.log4j.Logger;
@@ -12,6 +14,8 @@ import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.geo.ShapeRelation;
+import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +37,8 @@ public class RegionServiceImpl implements RegionService {
 
 	    BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
 
+		createIndex();
+
 	    for(Region region : regionDao.listAll()) {
 		    bulkRequestBuilder.add(new IndexRequest("region-index", "region",
 				    String.valueOf(id++)).source(indexRegion(region)));
@@ -51,6 +57,17 @@ public class RegionServiceImpl implements RegionService {
                 .execute().actionGet();
         return searchResponse.getHits().getTotalHits();
     }
+
+	@Override
+	public long listAllByPoint(double x, double y) {
+
+		SearchResponse searchResponse = client.prepareSearch("region-index")
+				.setTypes("region")
+				.setQuery(QueryBuilders.matchAllQuery())
+				.setFilter(FilterBuilders.geoShapeFilter("polygon", new PointImpl(x, y, SpatialContext.GEO), ShapeRelation.INTERSECTS))
+				.execute().actionGet();
+		return searchResponse.getHits().getTotalHits();
+	}
 
     private void createIndex() {
         try {

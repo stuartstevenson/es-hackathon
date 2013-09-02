@@ -9,8 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:/springContext-test.xml",
-                        "classpath:/applicationContext.xml"})
+@ContextConfiguration("classpath:/applicationContext.xml")
 public class RegionServiceTest {
 
     @Autowired
@@ -24,5 +23,6 @@ public class RegionServiceTest {
         Thread.sleep(1000);
         
         assertEquals("Expect 10 regions to be indexed", 10l, regionService.listAll());
+		assertEquals("Expect 2 regions to be returned", 2l, regionService.listAllByPoint(75,75));
     }
 }
