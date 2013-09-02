@@ -17,6 +17,9 @@
 - elasticsearch4: workhorse (master false, data true)
 - elasticsearch5: fetching results and load balancing (master false, data false)
 
+# monitoring tool, no installation required
+http://www.elastichq.org/app/index.php
+
 # cluster health
 http://localhost:9200/_cluster/health
 

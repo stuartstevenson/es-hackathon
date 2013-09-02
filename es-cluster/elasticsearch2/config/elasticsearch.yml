@@ -3,7 +3,7 @@ node.name: "rightmove-property-2"
 node.master: true
 node.data: false
 index.number_of_shards: 6
-index.number_of_replicas: 2
+index.number_of_replicas: 1
 
 ##################### ElasticSearch Configuration Example #####################
 
