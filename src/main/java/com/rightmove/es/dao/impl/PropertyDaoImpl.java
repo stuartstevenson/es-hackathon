@@ -1,18 +1,20 @@
 package com.rightmove.es.dao.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-
+import com.rightmove.es.dao.PropertyDao;
+import com.rightmove.es.domain.Property;
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.shape.impl.PointImpl;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Repository;
 
-import com.rightmove.es.dao.PropertyDao;
-import com.rightmove.es.domain.Property;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class PropertyDaoImpl implements PropertyDao {
@@ -46,6 +48,23 @@ public class PropertyDaoImpl implements PropertyDao {
 			property.setIncode(row.getCell(1).getStringCellValue());
 			property.setId((long) row.getCell(2).getNumericCellValue());
 			property.setSummary(row.getCell(3).getStringCellValue());
+			property.setPropertyType(row.getCell(4).getStringCellValue());
+			property.setPropertySubType(row.getCell(5).getStringCellValue());
+
+			List<String> features = new ArrayList<>();
+
+			for(String feature : row.getCell(6).getStringCellValue().split("^")) {
+				features.add(feature);
+			}
+
+
+
+			property.setFeatures(features);
+			property.setPoint(new PointImpl(
+					row.getCell(7).getNumericCellValue(),
+					row.getCell(8).getNumericCellValue(),
+					SpatialContext.GEO
+					));
 			
 			properties.add(property);
 		}

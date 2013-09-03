@@ -1,9 +1,12 @@
 package com.rightmove.es.domain;
 
+import com.spatial4j.core.shape.Point;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
+
+import java.util.List;
 
 @Document(indexName = "property-search-index", type = "rm-property")
 public class Property {
@@ -15,6 +18,10 @@ public class Property {
 	private String incode;
 	private String outcode;
 	private String summary;
+	private String propertyType;
+	private String propertySubType;
+	private List<String> features;
+	private Point point;
 
 	public Long getId() {
 		return id;
@@ -48,6 +55,38 @@ public class Property {
 	}
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+
+	public String getPropertyType() {
+		return propertyType;
+	}
+
+	public void setPropertyType(String propertyType) {
+		this.propertyType = propertyType;
+	}
+
+	public String getPropertySubType() {
+		return propertySubType;
+	}
+
+	public void setPropertySubType(String propertySubType) {
+		this.propertySubType = propertySubType;
+	}
+
+	public List<String> getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(List<String> features) {
+		this.features = features;
+	}
+
+	public Point getPoint() {
+		return point;
+	}
+
+	public void setPoint(Point point) {
+		this.point = point;
 	}
 
 	@Override
@@ -91,7 +130,7 @@ public class Property {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Property [id=" + id + ", incode=" + incode + ", outcode="
