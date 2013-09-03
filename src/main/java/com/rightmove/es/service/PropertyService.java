@@ -9,5 +9,6 @@ public interface PropertyService {
 	void indexProperty(Property property);
 	
 	void indexProperties(Collection<Property> properties);
-	
+
+    Collection<Property> findProperties(String searchPhrase);
 }
