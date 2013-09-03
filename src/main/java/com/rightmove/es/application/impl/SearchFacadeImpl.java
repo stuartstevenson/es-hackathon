@@ -5,6 +5,7 @@ import com.rightmove.es.application.SearchResult;
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.domain.RightmoveTermEntry;
 import com.rightmove.es.domain.RightmoveTermFacet;
+import com.rightmove.es.service.FacetService;
 import com.rightmove.es.service.PropertySearchService;
 import com.rightmove.es.service.PropertyService;
 import org.elasticsearch.action.search.SearchResponse;
@@ -24,6 +25,8 @@ public class SearchFacadeImpl implements SearchFacade {
     private PropertyService propertyService;
     @Autowired
     private PropertySearchService propertySearchService;
+    @Autowired
+    private FacetService facetService;
 
     @Override
     public SearchResult getSearchResult(String searchPhrase) {
@@ -32,16 +35,7 @@ public class SearchFacadeImpl implements SearchFacade {
 
         Collection<Property> properties = propertyService.extractProperties(searchResponse.getHits());
 
-        Collection<RightmoveTermFacet> facets = new HashSet<>();
-
-        for (Map.Entry<String, Facet> facetEntry : searchResponse.getFacets().facetsAsMap().entrySet()) {
-            TermsFacet termsFacet = (TermsFacet) facetEntry.getValue();
-            Collection<RightmoveTermEntry> rightmoveTermEntries = new HashSet<>();
-            for (TermsFacet.Entry entry : termsFacet) {
-                rightmoveTermEntries.add(new RightmoveTermEntry(entry.getTerm().string(), entry.getCount()));
-            }
-            facets.add(new RightmoveTermFacet(termsFacet.getName(), termsFacet.getTotalCount(), rightmoveTermEntries));
-        }
+        Collection<RightmoveTermFacet> facets = facetService.extractFacets(searchResponse.getFacets());
 
         return new SearchResult(searchPhrase, properties, facets);
     }
