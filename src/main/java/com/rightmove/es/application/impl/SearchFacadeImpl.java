@@ -37,6 +37,6 @@ public class SearchFacadeImpl implements SearchFacade {
 
         Collection<RightmoveTermFacet> facets = facetService.extractFacets(searchResponse.getFacets());
 
-        return new SearchResult(searchPhrase, properties, facets);
+        return new SearchResult(searchPhrase, searchResponse.getTookInMillis(), properties, facets);
     }
 }
