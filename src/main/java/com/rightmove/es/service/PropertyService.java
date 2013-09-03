@@ -3,6 +3,7 @@ package com.rightmove.es.service;
 import java.util.Collection;
 
 import com.rightmove.es.domain.Property;
+import org.elasticsearch.search.SearchHits;
 
 public interface PropertyService {
 
@@ -10,5 +11,5 @@ public interface PropertyService {
 	
 	void indexProperties(Collection<Property> properties);
 
-    Collection<Property> findProperties(String searchPhrase);
+    Collection<Property> extractProperties(SearchHits searchPhrase);
 }

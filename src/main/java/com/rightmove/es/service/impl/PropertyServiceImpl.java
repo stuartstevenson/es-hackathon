@@ -6,10 +6,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -51,16 +50,11 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
     @Override
-    public Collection<Property> findProperties(String searchPhrase) {
-
-        SearchResponse searchResponse = client.prepareSearch("property-search-index")
-                .setTypes("rm-property")
-                .setQuery(QueryBuilders.termQuery("summary", searchPhrase))
-                .execute().actionGet();
+    public Collection<Property> extractProperties(SearchHits searchHits) {
 
         Collection<Property> propertyCollection = new LinkedHashSet<Property>();
 
-        for (SearchHit searchHitFields : searchResponse.getHits()) {
+        for (SearchHit searchHitFields : searchHits) {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 Property property = objectMapper.readValue(searchHitFields.getSourceAsString(), Property.class);
