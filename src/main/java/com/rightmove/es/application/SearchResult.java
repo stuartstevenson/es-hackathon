@@ -1,9 +1,13 @@
 package com.rightmove.es.application;
 
 public class SearchResult {
-    private final String hello = "hello";
+    private String searchPhrase;
 
-    public String getHello() {
-        return hello;
+    public SearchResult(String searchPhrase) {
+        this.searchPhrase = searchPhrase;
+    }
+
+    public String getSearchPhrase() {
+        return searchPhrase;
     }
 }
