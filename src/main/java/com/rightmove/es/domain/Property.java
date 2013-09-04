@@ -5,6 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.util.Date;
+import java.util.List;
+
 @Document(indexName = "property-search-index", type = "rm-property")
 public class Property {
 
@@ -12,9 +15,76 @@ public class Property {
 	private Long id;
     @Version
     private Long version;
+	private Long price;
+	private Long bedrooms;
+	private Date firstListingDate;
 	private String incode;
 	private String outcode;
 	private String summary;
+	private String description;
+	private String propertyType;
+	private String propertySubType;
+	private List<String> features;
+	private List<String> imageUrls;
+	private Long numberOfImages;
+	private Long numberOfFloorplans;
+	private Long numberOfVirtualTours;
+
+	public Long getNumberOfImages() {
+		return numberOfImages;
+	}
+
+	public void setNumberOfImages(Long numberOfImages) {
+		this.numberOfImages = numberOfImages;
+	}
+
+	public Long getBedrooms() {
+		return bedrooms;
+	}
+
+	public void setBedrooms(Long bedrooms) {
+		this.bedrooms = bedrooms;
+	}
+
+	public Long getNumberOfFloorplans() {
+		return numberOfFloorplans;
+	}
+
+	public void setNumberOfFloorplans(Long numberOfFloorplans) {
+		this.numberOfFloorplans = numberOfFloorplans;
+	}
+
+	public Long getNumberOfVirtualTours() {
+		return numberOfVirtualTours;
+	}
+
+	public void setNumberOfVirtualTours(Long numberOfVirtualTours) {
+		this.numberOfVirtualTours = numberOfVirtualTours;
+	}
+
+	public Long getPrice() {
+		return price;
+	}
+
+	public void setPrice(Long price) {
+		this.price = price;
+	}
+
+	public Date getFirstListingDate() {
+		return firstListingDate;
+	}
+
+	public void setFirstListingDate(Date firstListingDate) {
+		this.firstListingDate = firstListingDate;
+	}
+
+	public List<String> getImageUrls() {
+		return imageUrls;
+	}
+
+	public void setImageUrls(List<String> imageUrls) {
+		this.imageUrls = imageUrls;
+	}
 
 	public Long getId() {
 		return id;
@@ -50,48 +120,38 @@ public class Property {
 		this.summary = summary;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((incode == null) ? 0 : incode.hashCode());
-		result = prime * result + ((outcode == null) ? 0 : outcode.hashCode());
-		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
-		return result;
+	public String getPropertyType() {
+		return propertyType;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Property other = (Property) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (incode == null) {
-			if (other.incode != null)
-				return false;
-		} else if (!incode.equals(other.incode))
-			return false;
-		if (outcode == null) {
-			if (other.outcode != null)
-				return false;
-		} else if (!outcode.equals(other.outcode))
-			return false;
-		if (summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!summary.equals(other.summary))
-			return false;
-		return true;
+
+	public void setPropertyType(String propertyType) {
+		this.propertyType = propertyType;
 	}
-	
+
+	public String getPropertySubType() {
+		return propertySubType;
+	}
+
+	public void setPropertySubType(String propertySubType) {
+		this.propertySubType = propertySubType;
+	}
+
+	public List<String> getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(List<String> features) {
+		this.features = features;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override
 	public String toString() {
 		return "Property [id=" + id + ", incode=" + incode + ", outcode="

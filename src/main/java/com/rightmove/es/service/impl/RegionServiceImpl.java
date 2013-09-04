@@ -1,7 +1,13 @@
 package com.rightmove.es.service.impl;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
+import com.rightmove.es.dataprovider.RegionDataProvider;
+import com.rightmove.es.domain.Region;
+import com.rightmove.es.service.RegionService;
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.shape.Shape;
+import com.spatial4j.core.shape.impl.PointImpl;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Polygon;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -14,14 +20,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.rightmove.es.dataprovider.RegionDataProvider;
-import com.rightmove.es.domain.Region;
-import com.rightmove.es.service.RegionService;
-import com.spatial4j.core.context.SpatialContext;
-import com.spatial4j.core.shape.Shape;
-import com.spatial4j.core.shape.impl.PointImpl;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Polygon;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 @Component
 public class RegionServiceImpl implements RegionService {
@@ -46,7 +45,7 @@ public class RegionServiceImpl implements RegionService {
 	    }
 
 	    if(bulkRequestBuilder.execute().actionGet().hasFailures()) {
-		    throw new RuntimeException();
+		    throw new RuntimeException("Failed to index regions.");
 	    }
     }
 
