@@ -73,8 +73,8 @@ public class PropertySearchServiceTest {
 		}
 	}
 
-	public void indexProperty(Long id, String city, String outcode) {
-		indexProperty(id, city, outcode, "IN", "summary test", null);
+	public void indexProperty(Long id, String city, String incode) {
+		indexProperty(id, city, "OUT", incode, "summary test", null);
 	}
 	
 	public void indexProperty(Long id, String city, String outcode, String incode, String summary, List<String> features) {
