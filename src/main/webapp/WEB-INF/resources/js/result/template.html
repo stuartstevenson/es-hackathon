@@ -1,0 +1,28 @@
+{{#if searchResult}}
+	{{#with searchResult}}
+	<div class="col-xs-12">
+		<div class="row">
+			<div class="col-xs-12">
+				<p>Your search took {{tookInMillis}} ms. Your&apos;re welcome</p>
+			</div>
+		</div>
+		<ul class="list-unstyled">
+		{{#each properties}}
+			<li>
+				<div class="row">
+					<div class="col-xs-4">
+						<p>{{summary}}</p>
+					</div>
+					<div class="col-xs-4">
+						<p>{{incode}}</p>
+					</div>
+					<div class="col-xs-4">
+						<p>{{outcode}}</p>
+					</div>
+				</div>
+			</li>
+		{{/each}}
+		</ul>
+	</div>
+	{{/with}}
+{{/if}}

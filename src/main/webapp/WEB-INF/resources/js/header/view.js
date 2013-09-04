@@ -1,17 +1,30 @@
-define(["jquery", "marionette", "handlebars", "header/model", "text!header/template.html"], function($, Marionette, Handlebars, Model, template){
+define(["jquery", "marionette", "handlebars", "text!header/template.html"], function($, Marionette, Handlebars, template){
 	return Marionette.ItemView.extend({
-		model: Model,
-		initialize: function(){
-			this.model = new Model();
-		},
 		template: Handlebars.compile(template),
 		ui: {
-			searchBox : "#search"
+			searchBox : "#searchInput",
+			searchButton : "#searchButton",
+			errorAlert: "#errorAlert"
 		},
 		events: {
-			"change #search": function(){
-				this.model.set("search", this.ui.searchBox.val());
+			"click #searchButton": function(){
+				if(this.ui.searchBox.val()){
+					this.model.unset("error");
+					this.router.navigate("search?searchPhrase=" + this.ui.searchBox.val(), {
+						trigger: true
+					});
+				}
+				else{
+					this.model.set("error", "Woops. Looks like you forgot to enter a search phrase");
+				}
 			}
+		},
+		modelEvents: {
+			"change:error": "render",
+			"change:searchPhrase": "render"
+		},
+		setRouter: function(router){
+			this.router = router;
 		}
 	});
 });

@@ -1,12 +1,17 @@
 <div class="col-xs-12 col-sm-12 col-md-9">
 	<div class="form-group">
-		<input id="search" class="form-control text-center" type="search" name="search" value="{{search}}" />
+		<input id="searchInput" class="form-control text-center" type="search" name="search" value="{{searchPhrase}}" />
 	</div>
 </div>
 <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-3 col-md-offset-0">
 	<div class="form-group">
-		<button type="button" class="btn btn-primary btn-block">
+		<button id="searchButton" type="button" class="btn btn-primary btn-block">
 			<span class="glyphicon glyphicon-search"></span> Search
 		</button>
 	</div>
 </div>
+{{#if error}}
+<div id="errorAlert" class="alert alert-danger col-xs-12 col-sm-6 col-sm-offset-3">
+	<p>{{error}}</p>
+</div>
+{{/if}}
