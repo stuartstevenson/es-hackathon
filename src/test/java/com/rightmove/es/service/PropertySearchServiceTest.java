@@ -37,7 +37,7 @@ public class PropertySearchServiceTest {
 		
 		PropertyFilter propertyFilter = new PropertyFilter();
 		propertyFilter.addIncodeFilter("nw1");
-		FacetedPage<Property> results = propertySearchService.search("summary test", propertyFilter);
+		FacetedPage<Property> results = propertySearchService.search("summary test", propertyFilter).getProperties();
 		assertEquals(2, results.getNumberOfElements());
 		for (Property property : results) {
 			System.out.println(property);
@@ -46,7 +46,7 @@ public class PropertySearchServiceTest {
 		System.out.println();
 		
 		propertyFilter.addIncodeFilter("nw2");
-		results = propertySearchService.search("summary test", propertyFilter);
+		results = propertySearchService.search("summary test", propertyFilter).getProperties();
 		assertEquals(3, results.getNumberOfElements());
 		for (Property property : results) {
 			System.out.println(property);

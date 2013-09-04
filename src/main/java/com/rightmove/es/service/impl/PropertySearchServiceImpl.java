@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.domain.PropertyFilter;
+import com.rightmove.es.domain.PropertySearchResult;
 import com.rightmove.es.service.PropertySearchService;
 
 @Component
@@ -28,12 +29,12 @@ public class PropertySearchServiceImpl implements PropertySearchService {
     private ElasticsearchTemplate esTemplate;
 
     @Override
-    public FacetedPage<Property> search(String searchPhrase) {
+    public PropertySearchResult search(String searchPhrase) {
     	return search(searchPhrase, null);
     }
 
 	@Override
-	public FacetedPage<Property> search(String searchPhrase, PropertyFilter propertyFilter) {
+	public PropertySearchResult search(String searchPhrase, PropertyFilter propertyFilter) {
 		NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder(); 
 		queryBuilder.withQuery(QueryBuilders.fieldQuery("summary", searchPhrase));
 		
@@ -44,7 +45,13 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		defineFacets(queryBuilder);
 		
         SearchQuery searchQuery = queryBuilder.build();
-        return esTemplate.queryForPage(searchQuery, Property.class);
+        
+        
+        long start = System.nanoTime();
+        FacetedPage<Property> results = esTemplate.queryForPage(searchQuery, Property.class);
+        long millisSpent = (System.nanoTime() - start) / 1000000;
+        
+        return new PropertySearchResult(searchPhrase, millisSpent, results);
 	}
 
 	private void defineFacets(NativeSearchQueryBuilder queryBuilder) {
