@@ -5,11 +5,14 @@ import com.rightmove.es.domain.PropertyQueryParams;
 import com.rightmove.es.domain.PropertySearchResult;
 import com.rightmove.es.service.PropertySearchService;
 
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermFilterBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.FacetedPage;
@@ -49,13 +52,10 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 				.field("propertySubType", 2.0f)
 				.field("features", 1.0f));
 
-		//TODO
-		if(propertyQueryParams != null) {
-			applyFilters(queryBuilder, propertyQueryParams);
-		}
-
+		applyFilters(queryBuilder, propertyQueryParams);
 		defineFacets(queryBuilder);
-
+		applyOrderBy(propertyQueryParams, queryBuilder);
+		
 		SearchQuery searchQuery = queryBuilder.build();
 
 		long start = System.nanoTime();
@@ -63,6 +63,17 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		long millisSpent = (System.nanoTime() - start) / 1000000;
 
 		return new PropertySearchResult(searchPhrase, millisSpent, results, propertyQueryParams);
+	}
+
+	private void applyOrderBy(PropertyQueryParams propertyQueryParams,
+			NativeSearchQueryBuilder queryBuilder) {
+		if(propertyQueryParams != null && !StringUtils.isEmpty(propertyQueryParams.getFieldOrderBy())) {
+			FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(propertyQueryParams.getFieldOrderBy());
+			if("DESC".equals(propertyQueryParams.getDirectionOrderBy())) {
+				fieldSortBuilder.order(SortOrder.DESC);
+			}
+			queryBuilder.withSort(fieldSortBuilder);
+		}
 	}
 
 	private void defineFacets(NativeSearchQueryBuilder queryBuilder) {
@@ -75,6 +86,10 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 
 	// there must be an easier way to do this
 	private void applyFilters(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyQueryParams) {
+		if(propertyQueryParams == null) {
+			return;
+		}
+
 		Collection<FilterBuilder> filterBuilders = new ArrayList<FilterBuilder>(); 
 
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "incode"));

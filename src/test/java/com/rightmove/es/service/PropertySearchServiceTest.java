@@ -1,8 +1,10 @@
 package com.rightmove.es.service;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.utils.StretchyUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.elasticsearch.common.geo.GeoPoint;
 import org.junit.Test;
@@ -13,11 +15,9 @@ import org.springframework.data.elasticsearch.core.FacetedPage;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.domain.PropertyQueryParams;
+import com.rightmove.es.utils.StretchyUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
@@ -96,6 +96,25 @@ public class PropertySearchServiceTest {
 		propertyFilter.addFilters("incode", Arrays.asList("DEF", "GHI"));
 		FacetedPage<Property> results = propertySearchService.search("London", propertyFilter).getProperties();
 		//assertEquals(2, results.getNumberOfElements());
+		for (Property property : results) {
+			System.out.println(property);
+		}
+	}
+	
+	@Test
+	public void order() throws InterruptedException {
+		
+		indexProperty(1L, "aaaaac", "AAA", "DEF", "summary test", null);
+		indexProperty(2L, "aaaaaa", "AAA", "GHI", "this property has 2 staircases", null);
+		indexProperty(3L, "aaaaab", "AAA", "BBB", "summary test", null);
+		
+		Thread.sleep(2000L);
+		
+		PropertyQueryParams propertyFilter = new PropertyQueryParams();
+		propertyFilter.setFieldOrderBy("city");
+		propertyFilter.setDirectionOrderBy("DESC");
+		FacetedPage<Property> results = propertySearchService.search("AAA", propertyFilter).getProperties();
+		//assertEquals(3, results.getNumberOfElements());
 		for (Property property : results) {
 			System.out.println(property);
 		}
