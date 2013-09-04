@@ -21,6 +21,7 @@ public class Property {
 	private String incode;
 	private String outcode;
 	private String summary;
+	private String description;
 	private String propertyType;
 	private String propertySubType;
 	private List<String> features;
@@ -143,60 +144,12 @@ public class Property {
 		this.features = features;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Property)) return false;
-
-		Property property = (Property) o;
-
-		if (features != null ? !features.equals(property.features) : property.features != null) return false;
-		if (firstListingDate != null ? !firstListingDate.equals(property.firstListingDate) : property.firstListingDate != null) {
-			return false;
-		}
-		if (id != null ? !id.equals(property.id) : property.id != null) return false;
-		if (imageUrls != null ? !imageUrls.equals(property.imageUrls) : property.imageUrls != null) return false;
-		if (incode != null ? !incode.equals(property.incode) : property.incode != null) return false;
-		if (numberOfFloorplans != null ? !numberOfFloorplans.equals(property.numberOfFloorplans) : property.numberOfFloorplans != null) {
-			return false;
-		}
-		if (numberOfImages != null ? !numberOfImages.equals(property.numberOfImages) : property.numberOfImages != null) {
-			return false;
-		}
-		if (numberOfVirtualTours != null ? !numberOfVirtualTours.equals(property.numberOfVirtualTours) : property.numberOfVirtualTours != null) {
-			return false;
-		}
-		if (outcode != null ? !outcode.equals(property.outcode) : property.outcode != null) return false;
-		if (price != null ? !price.equals(property.price) : property.price != null) return false;
-		if (propertySubType != null ? !propertySubType.equals(property.propertySubType) : property.propertySubType != null) {
-			return false;
-		}
-		if (propertyType != null ? !propertyType.equals(property.propertyType) : property.propertyType != null) {
-			return false;
-		}
-		if (summary != null ? !summary.equals(property.summary) : property.summary != null) return false;
-		if (version != null ? !version.equals(property.version) : property.version != null) return false;
-
-		return true;
+	public String getDescription() {
+		return description;
 	}
 
-	@Override
-	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (version != null ? version.hashCode() : 0);
-		result = 31 * result + (price != null ? price.hashCode() : 0);
-		result = 31 * result + (firstListingDate != null ? firstListingDate.hashCode() : 0);
-		result = 31 * result + (incode != null ? incode.hashCode() : 0);
-		result = 31 * result + (outcode != null ? outcode.hashCode() : 0);
-		result = 31 * result + (summary != null ? summary.hashCode() : 0);
-		result = 31 * result + (propertyType != null ? propertyType.hashCode() : 0);
-		result = 31 * result + (propertySubType != null ? propertySubType.hashCode() : 0);
-		result = 31 * result + (features != null ? features.hashCode() : 0);
-		result = 31 * result + (imageUrls != null ? imageUrls.hashCode() : 0);
-		result = 31 * result + (numberOfImages != null ? numberOfImages.hashCode() : 0);
-		result = 31 * result + (numberOfFloorplans != null ? numberOfFloorplans.hashCode() : 0);
-		result = 31 * result + (numberOfVirtualTours != null ? numberOfVirtualTours.hashCode() : 0);
-		return result;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
