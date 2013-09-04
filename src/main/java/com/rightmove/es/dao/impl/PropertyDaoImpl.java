@@ -2,19 +2,17 @@ package com.rightmove.es.dao.impl;
 
 import com.rightmove.es.dao.PropertyDao;
 import com.rightmove.es.domain.Property;
-import com.spatial4j.core.context.SpatialContext;
-import com.spatial4j.core.shape.impl.PointImpl;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.elasticsearch.common.collect.Lists;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Repository
 public class PropertyDaoImpl implements PropertyDao {
@@ -47,25 +45,30 @@ public class PropertyDaoImpl implements PropertyDao {
 			property.setOutcode(row.getCell(0).getStringCellValue());
 			property.setIncode(row.getCell(1).getStringCellValue());
 			property.setId((long) row.getCell(2).getNumericCellValue());
-			property.setSummary(row.getCell(3).getStringCellValue());
-			property.setPropertyType(row.getCell(4).getStringCellValue());
-			property.setPropertySubType(row.getCell(5).getStringCellValue());
+			property.setPrice((long) row.getCell(3).getNumericCellValue());
+			property.setBedrooms((long) row.getCell(4).getNumericCellValue());
+			property.setFirstListingDate(row.getCell(5).getDateCellValue());
+			property.setSummary(row.getCell(6).getStringCellValue());
+			property.setPropertyType(row.getCell(7).getStringCellValue());
+			property.setPropertySubType(row.getCell(8).getStringCellValue());
+			property.setFeatures(Lists.newArrayList(row.getCell(9).getStringCellValue().split("\\^")));
 
-			List<String> features = new ArrayList<>();
-
-			for(String feature : row.getCell(6).getStringCellValue().split("^")) {
-				features.add(feature);
-			}
-
-
-
-			property.setFeatures(features);
-			property.setPoint(new PointImpl(
-					row.getCell(7).getNumericCellValue(),
-					row.getCell(8).getNumericCellValue(),
+			/*property.setLocation(new PointImpl(
+					row.getCell(10).getNumericCellValue(),
+					row.getCell(11).getNumericCellValue(),
 					SpatialContext.GEO
-					));
-			
+			));*/
+
+			property.setImageUrls(Lists.newArrayList(
+						row.getCell(12).getStringCellValue().split(";")[1],
+						row.getCell(13).getStringCellValue().split(";")[1],
+						row.getCell(14).getStringCellValue().split(";")[1]
+			));
+
+			property.setNumberOfImages((long) row.getCell(15).getNumericCellValue());
+			property.setNumberOfFloorplans((long) row.getCell(16).getNumericCellValue());
+			property.setNumberOfVirtualTours((long) row.getCell(17).getNumericCellValue());
+
 			properties.add(property);
 		}
 		

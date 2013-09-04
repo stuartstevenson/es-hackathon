@@ -1,11 +1,11 @@
 package com.rightmove.es.domain;
 
-import com.spatial4j.core.shape.Point;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.util.Date;
 import java.util.List;
 
 @Document(indexName = "property-search-index", type = "rm-property")
@@ -15,13 +15,75 @@ public class Property {
 	private Long id;
     @Version
     private Long version;
+	private Long price;
+	private Long bedrooms;
+	private Date firstListingDate;
 	private String incode;
 	private String outcode;
 	private String summary;
 	private String propertyType;
 	private String propertySubType;
 	private List<String> features;
-	private Point point;
+	private List<String> imageUrls;
+	private Long numberOfImages;
+	private Long numberOfFloorplans;
+	private Long numberOfVirtualTours;
+
+	public Long getNumberOfImages() {
+		return numberOfImages;
+	}
+
+	public void setNumberOfImages(Long numberOfImages) {
+		this.numberOfImages = numberOfImages;
+	}
+
+	public Long getBedrooms() {
+		return bedrooms;
+	}
+
+	public void setBedrooms(Long bedrooms) {
+		this.bedrooms = bedrooms;
+	}
+
+	public Long getNumberOfFloorplans() {
+		return numberOfFloorplans;
+	}
+
+	public void setNumberOfFloorplans(Long numberOfFloorplans) {
+		this.numberOfFloorplans = numberOfFloorplans;
+	}
+
+	public Long getNumberOfVirtualTours() {
+		return numberOfVirtualTours;
+	}
+
+	public void setNumberOfVirtualTours(Long numberOfVirtualTours) {
+		this.numberOfVirtualTours = numberOfVirtualTours;
+	}
+
+	public Long getPrice() {
+		return price;
+	}
+
+	public void setPrice(Long price) {
+		this.price = price;
+	}
+
+	public Date getFirstListingDate() {
+		return firstListingDate;
+	}
+
+	public void setFirstListingDate(Date firstListingDate) {
+		this.firstListingDate = firstListingDate;
+	}
+
+	public List<String> getImageUrls() {
+		return imageUrls;
+	}
+
+	public void setImageUrls(List<String> imageUrls) {
+		this.imageUrls = imageUrls;
+	}
 
 	public Long getId() {
 		return id;
@@ -81,54 +143,60 @@ public class Property {
 		this.features = features;
 	}
 
-	public Point getPoint() {
-		return point;
-	}
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Property)) return false;
 
-	public void setPoint(Point point) {
-		this.point = point;
+		Property property = (Property) o;
+
+		if (features != null ? !features.equals(property.features) : property.features != null) return false;
+		if (firstListingDate != null ? !firstListingDate.equals(property.firstListingDate) : property.firstListingDate != null) {
+			return false;
+		}
+		if (id != null ? !id.equals(property.id) : property.id != null) return false;
+		if (imageUrls != null ? !imageUrls.equals(property.imageUrls) : property.imageUrls != null) return false;
+		if (incode != null ? !incode.equals(property.incode) : property.incode != null) return false;
+		if (numberOfFloorplans != null ? !numberOfFloorplans.equals(property.numberOfFloorplans) : property.numberOfFloorplans != null) {
+			return false;
+		}
+		if (numberOfImages != null ? !numberOfImages.equals(property.numberOfImages) : property.numberOfImages != null) {
+			return false;
+		}
+		if (numberOfVirtualTours != null ? !numberOfVirtualTours.equals(property.numberOfVirtualTours) : property.numberOfVirtualTours != null) {
+			return false;
+		}
+		if (outcode != null ? !outcode.equals(property.outcode) : property.outcode != null) return false;
+		if (price != null ? !price.equals(property.price) : property.price != null) return false;
+		if (propertySubType != null ? !propertySubType.equals(property.propertySubType) : property.propertySubType != null) {
+			return false;
+		}
+		if (propertyType != null ? !propertyType.equals(property.propertyType) : property.propertyType != null) {
+			return false;
+		}
+		if (summary != null ? !summary.equals(property.summary) : property.summary != null) return false;
+		if (version != null ? !version.equals(property.version) : property.version != null) return false;
+
+		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((incode == null) ? 0 : incode.hashCode());
-		result = prime * result + ((outcode == null) ? 0 : outcode.hashCode());
-		result = prime * result + ((summary == null) ? 0 : summary.hashCode());
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (version != null ? version.hashCode() : 0);
+		result = 31 * result + (price != null ? price.hashCode() : 0);
+		result = 31 * result + (firstListingDate != null ? firstListingDate.hashCode() : 0);
+		result = 31 * result + (incode != null ? incode.hashCode() : 0);
+		result = 31 * result + (outcode != null ? outcode.hashCode() : 0);
+		result = 31 * result + (summary != null ? summary.hashCode() : 0);
+		result = 31 * result + (propertyType != null ? propertyType.hashCode() : 0);
+		result = 31 * result + (propertySubType != null ? propertySubType.hashCode() : 0);
+		result = 31 * result + (features != null ? features.hashCode() : 0);
+		result = 31 * result + (imageUrls != null ? imageUrls.hashCode() : 0);
+		result = 31 * result + (numberOfImages != null ? numberOfImages.hashCode() : 0);
+		result = 31 * result + (numberOfFloorplans != null ? numberOfFloorplans.hashCode() : 0);
+		result = 31 * result + (numberOfVirtualTours != null ? numberOfVirtualTours.hashCode() : 0);
 		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Property other = (Property) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (incode == null) {
-			if (other.incode != null)
-				return false;
-		} else if (!incode.equals(other.incode))
-			return false;
-		if (outcode == null) {
-			if (other.outcode != null)
-				return false;
-		} else if (!outcode.equals(other.outcode))
-			return false;
-		if (summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!summary.equals(other.summary))
-			return false;
-		return true;
 	}
 
 	@Override
