@@ -32,6 +32,15 @@ public class Property {
 	private Long numberOfImages;
 	private Long numberOfFloorplans;
 	private Long numberOfVirtualTours;
+	private Double boost;
+
+	public Double getBoost() {
+		return boost;
+	}
+
+	public void setBoost(Double boost) {
+		this.boost = boost;
+	}
 
 	public String getCity() {
 		return city;

@@ -82,7 +82,12 @@ public class PropertyServiceImpl implements PropertyService {
 					.startObject("location")
 					.field("type", "geo_point")
 					.endObject()
-					.endObject().endObject().endObject().string();
+					.endObject()
+					.startObject("_boost")
+					.field("name", "boost")
+					.field("null_value", 1.0)
+					.endObject()
+					.endObject().endObject().string();
 
 			client.admin().indices().delete(new DeleteIndexRequest("property-search-index")).actionGet().isAcknowledged();
 			client.admin().indices().create(new CreateIndexRequest("property-search-index")).actionGet().isAcknowledged();
