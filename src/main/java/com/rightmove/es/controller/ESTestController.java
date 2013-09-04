@@ -44,8 +44,11 @@ public class ESTestController {
     }
 
     private void indexDummyData() {
+    	log.info("Loading all properties from XLS");
 		Collection<Property> properties = propertyDataProvider.listAll();
+		log.info("Indexing all properties from XLS...");
 		propertyService.indexProperties(properties);
+		log.info("Indexing XLS finished");
     }
 
 
