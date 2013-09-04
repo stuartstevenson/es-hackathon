@@ -17,7 +17,7 @@ import java.util.Collection;
 @Controller
 public class ESTestController {
 
-    private Logger log = Logger.getLogger(HomeController.class);
+    private Logger log = Logger.getLogger(ESTestController.class);
 
     @Autowired
     private PropertyRepository propertyRepository;
