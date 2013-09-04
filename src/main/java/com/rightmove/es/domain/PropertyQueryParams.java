@@ -17,8 +17,10 @@ public class PropertyQueryParams {
 	}
 
 	public void addFilters(String fieldName, Collection<String> filters) {
-		for (String filter : filters) {
-			addFilter(fieldName, filter);
+		if(filters != null){
+			for (String filter : filters) {
+				addFilter(fieldName, filter);
+			}
 		}
 	}
 

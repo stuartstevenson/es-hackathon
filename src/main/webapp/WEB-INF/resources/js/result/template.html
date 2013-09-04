@@ -1,58 +1,72 @@
 {{#if searchResult}}
 	{{#with searchResult}}
-		<div class="row">
-			<div class="col-xs-12">
-				<p>Your search took {{tookInMillis}} ms. Your&apos;re welcome. Currently viewing {{properties.number}} - {{properties.numberOfElements}} of {{properties.totalElements}} properties.</p>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-filter"></span> Filter your results
-					</div>
-					<ul class="list-group">
-						{{#each properties.facets}}
-							{{#if terms}}
-								<li class="list-group-item">
-									<h4 class="capitalize">{{name}}</h4>
-									<div class="form-group">
-										{{#each terms}}
-											<div class="checkbox">
-												<label for="{{../name}}-{{term}}">
-													<input id="{{../name}}-{{term}}" type="checkbox" name="" value="" />
-													{{term}} ({{count}})
-												</label>
-											</div>
-										{{/each}}
-									</div>
-								</li>
-							{{/if}}
-						{{/each}}
-					</ul>
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-12">
+					<p>Your search took {{tookInMillis}} ms. Your&apos;re welcome. Currently viewing {{properties.number}} - {{properties.numberOfElements}} of {{properties.totalElements}} properties.</p>
 				</div>
 			</div>
-			<div class="col-xs-8">
-				<ul class="list-unstyled">
-				{{#each properties.content}}
-					<li id="{{id}}">
-						<div class="panel panel-primary">
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-xs-12">
-										<p>{{outcode}} {{incode}}</p>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-xs-12">
-										<p>{{summary}}</p>
+			<div class="row">
+				<div class="col-xs-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<span class="glyphicon glyphicon-filter"></span> Filter your results
+						</div>
+						<ul class="list-group">
+							{{#each properties.facets}}
+								{{#if terms}}
+									<li class="list-group-item">
+										<h4 class="capitalize">{{name}}</h4>
+										<div class="form-group">
+											{{#each terms}}
+												<div class="checkbox">
+													<label for="{{../name}}-{{term}}">
+														<input id="{{../name}}-{{term}}" type="checkbox" name="{{name}}" value="{{term}}" {{#isTermActive ../../../filters}} checked="checked" {{/isTermActive}} />
+														{{term}} ({{count}})
+													</label>
+												</div>
+											{{/each}}
+										</div>
+									</li>
+								{{/if}}
+							{{/each}}
+						</ul>
+					</div>
+				</div>
+				<div class="col-xs-8">
+					<ul class="list-unstyled">
+					{{#each properties.content}}
+						<li id="{{id}}">
+							<div class="panel panel-primary">
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-xs-4">
+											<img src="http://media.rightmove.co.uk/{{imageUrls.[0]}}" class="img-thumbnail" />
+										</div>
+										<div class="col-xs-8">
+											<div class="row">
+												<div class="col-xs-12 text-success">
+													<strong>£{{price}}</strong>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<p><strong>{{bedrooms}} bedroom {{propertySubType}} in {{city}} {{outcode}} {{incode}}</strong></p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<p>{{summary}}</p>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</li>
-				{{/each}}
-				</ul>
+						</li>
+					{{/each}}
+					</ul>
+				</div>
 			</div>
 		</div>
 	{{/with}}
