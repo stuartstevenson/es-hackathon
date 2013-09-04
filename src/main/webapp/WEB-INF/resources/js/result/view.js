@@ -1,6 +1,6 @@
 define(["jquery", "underscore", "marionette", "handlebars", "text!result/template.html", "result/isTermActiveHelper"], function($, _, Marionette, Handlebars, template, IsFacetActiveHelper){
 	return Marionette.ItemView.extend({
-		template: Handlebars.compile(template),
+		template: Handlebars.compile(template, {noEscape: true}),
 		initialize: function(){
 			_.bindAll(this, "handleSearchResponse");
 			IsFacetActiveHelper.register();
