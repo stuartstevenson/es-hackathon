@@ -1,22 +1,24 @@
 package com.rightmove.es.controller;
 
-import com.rightmove.es.application.SearchFacade;
-import com.rightmove.es.application.SearchResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.FacetedPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.service.PropertySearchService;
 
 @Controller
 public class SearchController {
 
     @Autowired
-    private SearchFacade searchFacade;
+    private PropertySearchService propertySearchService;
 
     @RequestMapping("/search")
     @ResponseBody
-    public SearchResult
-    doSearch(SearchForm searchForm) {
-        return searchFacade.getSearchResult(searchForm.getSearchPhrase());
+    public FacetedPage<Property> doSearch(@RequestParam String searchPhrase) {
+        return propertySearchService.search(searchPhrase);
     }
 }
