@@ -2,8 +2,13 @@ package com.rightmove.es.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -21,6 +26,9 @@ public class PropertyServiceImpl implements PropertyService {
 
 	@Autowired
 	private ElasticsearchTemplate elasticsearchTemplate;
+
+    @Autowired
+    private Client client;
 
 	@Override
 	public void indexProperty(Property property) {
@@ -40,5 +48,24 @@ public class PropertyServiceImpl implements PropertyService {
 
 		elasticsearchTemplate.bulkIndex(indexQueries);
 	}
+
+    @Override
+    public Collection<Property> extractProperties(SearchHits searchHits) {
+
+        Collection<Property> propertyCollection = new LinkedHashSet<Property>();
+
+        for (SearchHit searchHitFields : searchHits) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                Property property = objectMapper.readValue(searchHitFields.getSourceAsString(), Property.class);
+                propertyCollection.add(property);
+            }
+            catch (Exception e) {
+
+            }
+        }
+
+        return propertyCollection;
+    }
 
 }

@@ -1,14 +1,14 @@
-define(["backbone", "header/view"], function (Backbone, HeaderView) {
+define(["backbone"], function (Backbone) {
 	return Backbone.Router.extend({
-		routes:{
-			"":"homepage"
-		},
-		homepage:function () {
-			this.application.headerRegion.show(new HeaderView());
-		},
 		initialize: function(options){
-			this.application = options.application;
+			this.options = options;
 			Backbone.history.start();
+		},
+		routes:{
+			"search": "search"
+		},
+		search: function(params){
+			this.options.model.set("searchPhrase", params.searchPhrase);
 		}
 	});
 });
