@@ -2,6 +2,7 @@ package com.rightmove.es.dao;
 
 import java.util.Collection;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.rightmove.es.dao.impl.PropertyDaoImpl;
@@ -12,8 +13,7 @@ public class PropertyDaoImplTest {
 	@Test
 	public void listAll() throws Exception {
 		Collection<Property> properties = new PropertyDaoImpl().listAll();
-		for (Property property : properties) {
-			System.out.println(property);
-		}
+		System.out.println("Found " + properties.size() + " properties");
+		Assert.assertTrue(properties.size() > 0);
 	}
 }

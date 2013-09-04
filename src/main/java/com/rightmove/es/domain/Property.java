@@ -1,12 +1,12 @@
 package com.rightmove.es.domain;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
-
-import java.util.Date;
-import java.util.List;
 
 @Document(indexName = "property-search-index", type = "rm-property")
 public class Property {
@@ -21,6 +21,7 @@ public class Property {
 	private Date firstListingDate;
 	private String incode;
 	private String outcode;
+	private String city;
 	private String summary;
 	private String description;
 	private String propertyType;
@@ -161,10 +162,26 @@ public class Property {
 		this.description = description;
 	}
 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
 	@Override
 	public String toString() {
-		return "Property [id=" + id + ", incode=" + incode + ", outcode="
-				+ outcode + ", summary=" + StringUtils.substring(summary, 0, 7) + "...]"; // StringUtils avoids null pointer
+		return "Property [id=" + id + ", version=" + version + ", price="
+				+ price + ", bedrooms=" + bedrooms + ", address=" + address
+				+ ", firstListingDate=" + firstListingDate + ", incode="
+				+ incode + ", outcode=" + outcode + ", city=" + city
+				+ ", summary=" + summary + ", description=" + description
+				+ ", propertyType=" + propertyType + ", propertySubType="
+				+ propertySubType + ", features=" + features + ", imageUrls="
+				+ imageUrls + ", numberOfImages=" + numberOfImages
+				+ ", numberOfFloorplans=" + numberOfFloorplans
+				+ ", numberOfVirtualTours=" + numberOfVirtualTours + "]";
 	}
 
 }
