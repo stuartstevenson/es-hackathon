@@ -43,7 +43,7 @@ public class PropertySearchServiceTest {
 		indexProperty(4L, "London", "SSS", "AB4", "summary test", null);
 		indexProperty(5L, "London", "TTT", "AB5", "summary test", null);
 		
-		Thread.sleep(800L);
+		Thread.sleep(2000L);
 		
 		PropertyQueryParams propertyQueryParams = new PropertyQueryParams();
 		propertyQueryParams.addFilter("outcode", "RRR");
@@ -66,13 +66,15 @@ public class PropertySearchServiceTest {
 	}
 	
 	@Test
-	public void weight() {
+	public void weight() throws InterruptedException {
 		
 		indexProperty(1L, "Milton Keynes", "AB1", "DE2", "summary test", null);
 		indexProperty(2L, "Milton Keynes", "AB1", "DE3", "this property has 2 staircases", Arrays.asList("walls"));
 		indexProperty(3L, "NW1", "NW2");
 		indexProperty(4L, "NW1", "NW1");
 		indexProperty(5L, "London", "NW3");
+		
+		Thread.sleep(2000L);
 		
 		FacetedPage<Property> results = propertySearchService.search("AB1 walls").getProperties();
 		//assertEquals(2, results.getNumberOfElements());
@@ -82,11 +84,13 @@ public class PropertySearchServiceTest {
 	}
 	
 	@Test
-	public void filters() {
+	public void filters() throws InterruptedException {
 		
 		indexProperty(1L, "London", "ABC", "DEF", "summary test", null);
 		indexProperty(2L, "London", "ABC", "GHI", "this property has 2 staircases", null);
 		indexProperty(3L, "London", "AAA", "BBB", "summary test", null);
+		
+		Thread.sleep(2000L);
 		
 		PropertyQueryParams propertyFilter = new PropertyQueryParams();
 		propertyFilter.addFilters("incode", Arrays.asList("DEF", "GHI"));
