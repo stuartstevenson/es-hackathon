@@ -40,14 +40,14 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	public PropertySearchResult search(String searchPhrase, PropertyQueryParams propertyQueryParams) {
 		NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder(); 
 		queryBuilder.withQuery(QueryBuilders.multiMatchQuery(searchPhrase)
-				.field("incode", 5.0f)
-				.field("outcode", 3.0f)
-				.field("city", 2.0f)
-				.field("summary", 0.2f)
+				.field("incode", 100.0f)
+				.field("outcode", 80.0f)
+				.field("city", 90.0f)
+				.field("summary", 0.3f)
 				.field("description", 0.2f)
 				.field("propertyType", 1.5f)
 				.field("propertySubType", 2.0f)
-				.field("features", 2.0f));
+				.field("features", 1.0f));
 
 		//TODO
 		if(propertyQueryParams != null) {
@@ -74,14 +74,14 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	}
 
 	// there must be an easier way to do this
-	private void applyFilters(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyFilter) {
+	private void applyFilters(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyQueryParams) {
 		Collection<FilterBuilder> filterBuilders = new ArrayList<FilterBuilder>(); 
 
-		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "incode"));
-		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "outcode"));
-		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "city"));
-		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "propertyType"));
-		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "propertySubType"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "incode"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "outcode"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "city"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertyType"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertySubType"));
 		// filber also by features?
 		
 		// this needs refactoring, there must be an easier way to add one filter after the other
@@ -99,11 +99,11 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	// this needs refactoring, there must be an easier way to add one filter after the other
 	private List<TermFilterBuilder> applyFilter(
 			NativeSearchQueryBuilder queryBuilder,
-			PropertyQueryParams propertyFilter, String fieldName) {
-		Collection<String> filterValues = propertyFilter.getFilters(fieldName);
+			PropertyQueryParams propertyQueryParams, String fieldName) {
+		Collection<String> filterValues = propertyQueryParams.getFilters(fieldName);
 		List<TermFilterBuilder> filterBuilders = new ArrayList<TermFilterBuilder>(filterValues.size());
 
-		for (String value : propertyFilter.getFilters(fieldName)) {
+		for (String value : propertyQueryParams.getFilters(fieldName)) {
 			TermFilterBuilder filter = FilterBuilders.termFilter(fieldName, value);
 			filterBuilders.add(filter);
 		}
