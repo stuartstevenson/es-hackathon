@@ -6,7 +6,8 @@ require.config({
         backbone: "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone",
         marionette: "http://cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.4-bundled/backbone.marionette",
         handlebars: "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars",
-        bootstrap: "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/js/bootstrap"
+        bootstrap: "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/js/bootstrap",
+		queryparams: "/resources/js/libs/backbone.queryparams"
     },
     shim: {
         jquery: {
@@ -28,6 +29,12 @@ require.config({
             ],
             exports: "Backbone"
         },
+		queryparams: {
+			deps: [
+				"backbone"
+			],
+			exports: "Backbone.History.prototype.getQueryParameters"
+		},
         handlebars: {
             exports: "Handlebars"
         },
@@ -40,6 +47,6 @@ require.config({
     }
 });
 
-define(["app"], function(application){
+define(["app", "bootstrap", "queryparams"], function(application){
     application.start();
 });
