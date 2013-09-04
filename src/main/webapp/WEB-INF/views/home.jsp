@@ -13,7 +13,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h1>Rightmove Elastic Search</h1>
+					<img src="/resources/image/site_logo_strapless_google.png" alt="Rightmove" />
 				</div>
 			</div>
 			<div class="row" id="headerRegion"></div>
