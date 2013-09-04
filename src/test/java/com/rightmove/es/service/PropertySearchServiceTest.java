@@ -31,11 +31,11 @@ public class PropertySearchServiceTest {
 	@Test
 	public void getSearchResultFilteredWithFacets() {
 		
-		indexProperty(1L, "London", "NW1");
-		indexProperty(2L, "London", "NW1");
-		indexProperty(3L, "London", "NW2");
-		indexProperty(4L, "London", "NW3");
-		indexProperty(5L, "London", "NW4");
+		indexProperty(1L, "London", "NW1", "AB1", "summary test", null);
+		indexProperty(2L, "London", "NW1", "AB2", "summary test", null);
+		indexProperty(3L, "London", "NW2", "AB3", "summary test", null);
+		indexProperty(4L, "London", "NW3", "AB4", "summary test", null);
+		indexProperty(5L, "London", "NW4", "AB5", "summary test", null);
 		
 		PropertyFilter propertyFilter = new PropertyFilter();
 		propertyFilter.addFilter("nw1","outcode");
