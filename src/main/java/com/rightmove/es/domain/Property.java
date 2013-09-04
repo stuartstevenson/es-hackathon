@@ -1,5 +1,6 @@
 package com.rightmove.es.domain;
 
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -17,10 +18,11 @@ public class Property {
 	private Long price;
 	private Long bedrooms;
 	private String address;
+	private String city;
 	private Date firstListingDate;
 	private String incode;
 	private String outcode;
-	private String city;
+	private GeoPoint location;
 	private String summary;
 	private String description;
 	private String propertyType;
@@ -30,6 +32,14 @@ public class Property {
 	private Long numberOfImages;
 	private Long numberOfFloorplans;
 	private Long numberOfVirtualTours;
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	public String getAddress() {
 		return address;
@@ -161,12 +171,12 @@ public class Property {
 		this.description = description;
 	}
 
-	public String getCity() {
-		return city;
+	public void setLocation(GeoPoint location) {
+		this.location = location;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public GeoPoint getLocation() {
+		return location;
 	}
 
 	@Override

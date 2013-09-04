@@ -1,10 +1,12 @@
 package com.rightmove.es.service.impl;
 
 import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyFilter;
+import com.rightmove.es.domain.PropertyQueryParams;
 import com.rightmove.es.domain.PropertySearchResult;
 import com.rightmove.es.service.PropertySearchService;
+
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermFilterBuilder;
@@ -16,7 +18,9 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Component
 public class PropertySearchServiceImpl implements PropertySearchService {
@@ -33,7 +37,7 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	}
 
 	@Override
-	public PropertySearchResult search(String searchPhrase, PropertyFilter propertyFilter) {
+	public PropertySearchResult search(String searchPhrase, PropertyQueryParams propertyQueryParams) {
 		NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder(); 
 		queryBuilder.withQuery(QueryBuilders.multiMatchQuery(searchPhrase)
 				.field("incode", 5.0f)
@@ -45,9 +49,9 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 				.field("propertySubType", 2.0f)
 				.field("features", 2.0f));
 
-
-		if(propertyFilter != null) {
-			applyFilters(queryBuilder, propertyFilter);
+		//TODO
+		if(propertyQueryParams != null) {
+			applyFilters(queryBuilder, propertyQueryParams);
 		}
 
 		defineFacets(queryBuilder);
@@ -58,22 +62,51 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		FacetedPage<Property> results = esTemplate.queryForPage(searchQuery, Property.class);
 		long millisSpent = (System.nanoTime() - start) / 1000000;
 
-		return new PropertySearchResult(searchPhrase, millisSpent, results);
+		return new PropertySearchResult(searchPhrase, millisSpent, results, propertyQueryParams);
 	}
 
 	private void defineFacets(NativeSearchQueryBuilder queryBuilder) {
 		queryBuilder.withFacet(new TermFacetRequestBuilder("outcode").fields("outcode").build());
+		queryBuilder.withFacet(new TermFacetRequestBuilder("incode").fields("incode").build());
+		queryBuilder.withFacet(new TermFacetRequestBuilder("city").fields("city").build());
+		queryBuilder.withFacet(new TermFacetRequestBuilder("propertyType").fields("propertyType").build());
+		queryBuilder.withFacet(new TermFacetRequestBuilder("propertySubType").fields("propertySubType").build());
 	}
 
-	private NativeSearchQueryBuilder applyFilters(NativeSearchQueryBuilder queryBuilder, PropertyFilter propertyFilter) {
-		Collection<String> incodes = propertyFilter.getFilters("outcode");
-		TermFilterBuilder[] incodeFilters = new TermFilterBuilder[incodes.size()];
+	// there must be an easier way to do this
+	private void applyFilters(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyFilter) {
+		Collection<FilterBuilder> filterBuilders = new ArrayList<FilterBuilder>(); 
 
-		int i = 0;
-		for (String incode : propertyFilter.getFilters("outcode")) {
-			TermFilterBuilder filter = FilterBuilders.termFilter("outcode", incode);
-			incodeFilters[i++] = filter;
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "incode"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "outcode"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "city"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "propertyType"));
+		filterBuilders.addAll(applyFilter(queryBuilder, propertyFilter, "propertySubType"));
+		// filber also by features?
+		
+		// this needs refactoring, there must be an easier way to add one filter after the other
+		Object[] array = filterBuilders.toArray();
+		FilterBuilder[] filterBuilderArray= new FilterBuilder[array.length];
+		
+		for (int i = 0; i < array.length; i++) {
+			FilterBuilder filter = (FilterBuilder) array[i];
+			filterBuilderArray[i] = filter;
 		}
-		return queryBuilder.withFilter(FilterBuilders.orFilter(incodeFilters));
+		
+		queryBuilder.withFilter(FilterBuilders.orFilter(filterBuilderArray));
+	}
+
+	// this needs refactoring, there must be an easier way to add one filter after the other
+	private List<TermFilterBuilder> applyFilter(
+			NativeSearchQueryBuilder queryBuilder,
+			PropertyQueryParams propertyFilter, String fieldName) {
+		Collection<String> filterValues = propertyFilter.getFilters(fieldName);
+		List<TermFilterBuilder> filterBuilders = new ArrayList<TermFilterBuilder>(filterValues.size());
+
+		for (String value : propertyFilter.getFilters(fieldName)) {
+			TermFilterBuilder filter = FilterBuilders.termFilter(fieldName, value);
+			filterBuilders.add(filter);
+		}
+		return filterBuilders;
 	}
 }
