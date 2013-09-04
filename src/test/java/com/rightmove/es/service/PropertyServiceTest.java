@@ -1,14 +1,14 @@
 package com.rightmove.es.service;
 
-import java.util.ArrayList;
-
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.utils.StretchyUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.rightmove.es.domain.Property;
+import java.util.ArrayList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
@@ -24,6 +24,7 @@ public class PropertyServiceTest {
 		property.setIncode("INC");
 		property.setOutcode("OUT");
 		property.setSummary("summary test");
+		property.setLocation(StretchyUtils.getRandomLocation());
 		propertyService.indexProperty(property);
 	}
 
@@ -36,6 +37,7 @@ public class PropertyServiceTest {
 			property.setIncode("AB" + i % 10);
 			property.setOutcode(i % 10 + "CD");
 			property.setSummary("summary test " + i);
+			property.setLocation(StretchyUtils.getRandomLocation());
 			properties.add(property);
 		}
 		propertyService.indexProperties(properties);

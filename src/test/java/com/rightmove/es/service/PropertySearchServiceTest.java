@@ -2,6 +2,8 @@ package com.rightmove.es.service;
 
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.domain.PropertyFilter;
+import com.rightmove.es.utils.StretchyUtils;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
 public class PropertySearchServiceTest {
+
+	private static final GeoPoint randomLocation = StretchyUtils.getRandomLocation();
 
 	@Autowired
 	private PropertySearchService propertySearchService;
@@ -38,7 +42,7 @@ public class PropertySearchServiceTest {
 		indexProperty(5L, "London", "NW4", "AB5", "summary test", null);
 		
 		PropertyFilter propertyFilter = new PropertyFilter();
-		propertyFilter.addFilter("nw1","outcode");
+		propertyFilter.addFilter("nw1", "outcode");
 		FacetedPage<Property> results = propertySearchService.search("summary test", propertyFilter).getProperties();
 		assertEquals(2, results.getNumberOfElements());
 		for (Property property : results) {
@@ -47,7 +51,7 @@ public class PropertySearchServiceTest {
 
 		System.out.println();
 
-		propertyFilter.addFilter("nw2","outcode");
+		propertyFilter.addFilter("nw2", "outcode");
 		results = propertySearchService.search("summary test", propertyFilter).getProperties();
 		assertEquals(3, results.getNumberOfElements());
 		for (Property property : results) {
@@ -73,11 +77,11 @@ public class PropertySearchServiceTest {
 		}
 	}
 
-	public void indexProperty(Long id, String city, String incode) {
+	private void indexProperty(Long id, String city, String incode) {
 		indexProperty(id, city, "OUT", incode, "summary test", null);
 	}
 	
-	public void indexProperty(Long id, String city, String outcode, String incode, String summary, List<String> features) {
+	private void indexProperty(Long id, String city, String outcode, String incode, String summary, List<String> features) {
 		Property property = new Property();
 		property.setId(id);
 		property.setIncode(incode);
@@ -85,6 +89,7 @@ public class PropertySearchServiceTest {
 		property.setCity(city);
 		property.setSummary(summary);
 		property.setFeatures(features);
+		property.setLocation(StretchyUtils.getRandomLocation());
 		propertyService.indexProperty(property);
 	}
 }
