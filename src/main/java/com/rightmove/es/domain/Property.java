@@ -17,6 +17,7 @@ public class Property {
     private Long version;
 	private Long price;
 	private Long bedrooms;
+	private String address;
 	private Date firstListingDate;
 	private String incode;
 	private String outcode;
@@ -29,6 +30,14 @@ public class Property {
 	private Long numberOfImages;
 	private Long numberOfFloorplans;
 	private Long numberOfVirtualTours;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public Long getNumberOfImages() {
 		return numberOfImages;

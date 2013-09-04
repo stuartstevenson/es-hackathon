@@ -47,28 +47,29 @@ public class PropertyDaoImpl implements PropertyDao {
 			property.setId((long) row.getCell(2).getNumericCellValue());
 			property.setPrice((long) row.getCell(3).getNumericCellValue());
 			property.setBedrooms((long) row.getCell(4).getNumericCellValue());
-			property.setFirstListingDate(row.getCell(5).getDateCellValue());
-			property.setSummary(row.getCell(6).getStringCellValue());
-			property.setDescription(row.getCell(7).getStringCellValue());
-			property.setPropertyType(row.getCell(8).getStringCellValue());
-			property.setPropertySubType(row.getCell(9).getStringCellValue());
-			property.setFeatures(Lists.newArrayList(row.getCell(10).getStringCellValue().split("\\^")));
+			property.setAddress(row.getCell(5).getStringCellValue());
+			property.setFirstListingDate(row.getCell(6).getDateCellValue());
+			property.setSummary(row.getCell(7).getStringCellValue());
+			property.setDescription(row.getCell(8).getStringCellValue());
+			property.setPropertyType(row.getCell(9).getStringCellValue());
+			property.setPropertySubType(row.getCell(10).getStringCellValue());
+			property.setFeatures(Lists.newArrayList(row.getCell(11).getStringCellValue().split("\\^")));
 
 			/*property.setLocation(new PointImpl(
-					row.getCell(11).getNumericCellValue(),
 					row.getCell(12).getNumericCellValue(),
+					row.getCell(13).getNumericCellValue(),
 					SpatialContext.GEO
 			));*/
 
 			property.setImageUrls(Lists.newArrayList(
-						row.getCell(13).getStringCellValue().split(";")[1],
 						row.getCell(14).getStringCellValue().split(";")[1],
-						row.getCell(15).getStringCellValue().split(";")[1]
+						row.getCell(15).getStringCellValue().split(";")[1],
+						row.getCell(16).getStringCellValue().split(";")[1]
 			));
 
-			property.setNumberOfImages((long) row.getCell(16).getNumericCellValue());
-			property.setNumberOfFloorplans((long) row.getCell(17).getNumericCellValue());
-			property.setNumberOfVirtualTours((long) row.getCell(18).getNumericCellValue());
+			property.setNumberOfImages((long) row.getCell(17).getNumericCellValue());
+			property.setNumberOfFloorplans((long) row.getCell(18).getNumericCellValue());
+			property.setNumberOfVirtualTours((long) row.getCell(19).getNumericCellValue());
 
 			properties.add(property);
 		}
