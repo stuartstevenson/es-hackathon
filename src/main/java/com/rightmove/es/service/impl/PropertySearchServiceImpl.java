@@ -55,16 +55,16 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	}
 
 	private void defineFacets(NativeSearchQueryBuilder queryBuilder) {
-		queryBuilder.withFacet(new TermFacetRequestBuilder("incode").fields("incode").build());
+		queryBuilder.withFacet(new TermFacetRequestBuilder("outcode").fields("outcode").build());
 	}
 
 	private NativeSearchQueryBuilder applyFilters(NativeSearchQueryBuilder queryBuilder, PropertyFilter propertyFilter) {
-		Collection<String> incodes = propertyFilter.getIncodeFilters();
+		Collection<String> incodes = propertyFilter.getFilters("outcode");
 		TermFilterBuilder[] incodeFilters = new TermFilterBuilder[incodes.size()];
-		
+
 		int i = 0;
-		for (String incode : propertyFilter.getIncodeFilters()) {
-			TermFilterBuilder filter = FilterBuilders.termFilter("incode", incode);
+		for (String incode : propertyFilter.getFilters("outcode")) {
+			TermFilterBuilder filter = FilterBuilders.termFilter("outcode", incode);
 			incodeFilters[i++] = filter;
 		}
 		return queryBuilder.withFilter(FilterBuilders.orFilter(incodeFilters));

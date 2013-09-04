@@ -13,20 +13,21 @@ public class PropertyFilter {
 	public PropertyFilter() {
 		filters = new HashMap<String, Collection<String>>();
 	}
-	
-	public void addIncodeFilter(String incode) {
+
+
+	public void addFilter(String incode, String fieldName) {
 		incode = incode.toLowerCase(); // ES
-		Collection<String> incodeFilters = filters.get("incode");
+		Collection<String> incodeFilters = filters.get(fieldName);
 		if(incodeFilters == null) {
 			incodeFilters = new ArrayList<String>();
-			filters.put("incode", incodeFilters);
+			filters.put(fieldName, incodeFilters);
 		}
 		incodeFilters.add(incode);
-		
+
 	}
-	
-	public Collection<String> getIncodeFilters() {
-		Collection<String> incodeFilters = filters.get("incode");
+
+	public Collection<String> getFilters(String fieldName) {
+		Collection<String> incodeFilters = filters.get(fieldName);
 		if(incodeFilters == null) {
 			incodeFilters = new ArrayList<String>();
 		}
