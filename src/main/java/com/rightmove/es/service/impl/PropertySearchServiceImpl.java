@@ -43,8 +43,8 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	public PropertySearchResult search(String searchPhrase, PropertyQueryParams propertyQueryParams) {
 		NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder(); 
 		queryBuilder.withQuery(QueryBuilders.multiMatchQuery(searchPhrase)
-				.field("incode", 100.0f)
-				.field("outcode", 80.0f)
+				.field("incode", 80.0f)
+				.field("outcode", 90.0f)
 				.field("city", 90.0f)
 				.field("summary", 0.3f)
 				.field("description", 0.2f)

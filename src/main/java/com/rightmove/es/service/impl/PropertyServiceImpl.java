@@ -58,7 +58,7 @@ public class PropertyServiceImpl implements PropertyService {
 		}
 
 		if(bulkRequestBuilder.execute().actionGet().hasFailures()) {
-			throw new RuntimeException("Failed to bulk index regions.");
+			throw new RuntimeException("Failed to bulk index properties.");
 		}
 	}
 
