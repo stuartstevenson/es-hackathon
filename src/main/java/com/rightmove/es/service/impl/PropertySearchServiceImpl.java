@@ -5,7 +5,6 @@ import com.rightmove.es.domain.PropertyQueryParams;
 import com.rightmove.es.domain.PropertySearchResult;
 import com.rightmove.es.service.PropertySearchService;
 import org.apache.commons.lang.StringUtils;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class PropertySearchServiceImpl implements PropertySearchService {
@@ -112,7 +110,7 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	private void applyOrderBy(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyQueryParams) {
 		if(!StringUtils.isEmpty(propertyQueryParams.getFieldOrderBy())) {
 			FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(propertyQueryParams.getFieldOrderBy());
-			if("DESC".equals(propertyQueryParams.getDirectionOrderBy())) {
+			if("desc".equals(propertyQueryParams.getDirectionOrderBy())) {
 				fieldSortBuilder.order(SortOrder.DESC);
 			}
 			queryBuilder.withSort(fieldSortBuilder);
