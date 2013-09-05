@@ -2,18 +2,39 @@ define(["jquery", "underscore", "marionette", "handlebars", "text!result/templat
 	return Marionette.ItemView.extend({
 		template: Handlebars.compile(template, {noEscape: true}),
 		initialize: function(){
-			_.bindAll(this, "handleSearchResponse");
 			IsFacetActiveHelper.register();
 		},
 		modelEvents: {
-			"change:searchResult": "render",
-			"change:searchPhrase": "search"
+			"change:searchResult": "render"
 		},
-		search: function(){
-			$.get("/search", {searchPhrase: this.model.get("searchPhrase")}, this.handleSearchResponse);
+		events: {
+			"change .facet" : "facetChange",
+			"click #filterUpdate" : "filterUpdate"
 		},
-		handleSearchResponse: function(data){
-			this.model.set("searchResult", data);
+		setRouter: function(router){
+			this.router = router;
+		},
+		facetChange: function(event){
+			var $input = $(event.target);
+			var isChecked = $input.is(":checked");
+			var facetName = $input.data("facet");
+			if(!this.model.has("filters." + facetName) && isChecked){
+				this.model.set("filters." + facetName, [$input.val()])
+			}
+			else if(isChecked){
+				var newFilterList = this.model.get("filters." + facetName);
+				newFilterList.push($input.val());
+				this.model.set("filters." + facetName, newFilterList)
+			}
+			else if(!isChecked){
+				var newFilterList = _.without(this.model.get("filters." + facetName), $input.val());
+				this.model.set("filters." + facetName, newFilterList);
+			}
+		},
+		filterUpdate: function(){
+			this.router.navigate("/search?" + this.model.getSearchParamsForURL(), {
+				trigger: true
+			});
 		}
 	});
 });

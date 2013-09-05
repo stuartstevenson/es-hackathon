@@ -57,4 +57,8 @@ public class PropertyQueryParams {
 	public void setDirectionOrderBy(String directionOrderBy) {
 		this.directionOrderBy = directionOrderBy;
 	}
+
+	public Map<String, Collection<String>> getFilters() {
+		return filters;
+	}
 }

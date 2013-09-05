@@ -32,9 +32,9 @@ public class SearchController {
     	PropertyQueryParams propertyQueryParams = new PropertyQueryParams();
     	propertyQueryParams.addFilters("incode", incode);
     	propertyQueryParams.addFilters("outcode", outcode);
-    	propertyQueryParams.addFilters("city", outcode);
-    	propertyQueryParams.addFilters("propertyType", outcode);
-    	propertyQueryParams.addFilters("propertySubType", outcode);
+    	propertyQueryParams.addFilters("city", city);
+    	propertyQueryParams.addFilters("propertyType", propertyType);
+    	propertyQueryParams.addFilters("propertySubType", propertySubType);
     	propertyQueryParams.setFieldOrderBy(fieldOrderBy);
     	propertyQueryParams.setDirectionOrderBy(directionOrderBy);
 		return propertySearchService.search(searchPhrase, propertyQueryParams);

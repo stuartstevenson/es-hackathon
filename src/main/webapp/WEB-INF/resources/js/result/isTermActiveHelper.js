@@ -1,14 +1,12 @@
 define(["handlebars", "underscore"], function(Handlebars, _){
 	return function(){
 		var register = function(){
-			Handlebars.registerHelper("isTermActive", function(filters, block){
-				var filter;
-				for(filter in filters){
-					if(filter.name === this.parent.name){
-						if(_.contains(filter.terms, this.term)){
-							return block(this);
-						}
-					}
+			Handlebars.registerHelper("isTermActive", function(filters, name, block){
+				if(_.contains(filters[name], this.term)){
+					return block.fn(this);
+				}
+				else{
+					return block.inverse(this);
 				}
 			});
 		};

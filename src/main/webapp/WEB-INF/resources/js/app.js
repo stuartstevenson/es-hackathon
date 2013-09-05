@@ -18,6 +18,7 @@ define(["marionette", "router", "model", "header/view", "result/view"], function
 			model: model
 		});
 		headerView.setRouter(router);
+		resultView.setRouter(router);
 	});
 	return application;
 });
