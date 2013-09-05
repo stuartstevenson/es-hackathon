@@ -14,4 +14,6 @@ public interface PropertyService {
     Collection<Property> extractProperties(SearchHits searchPhrase);
 
 	void createIndex();
+
+	void indexAllProperties();
 }

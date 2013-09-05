@@ -1,7 +1,6 @@
 package com.rightmove.es.service;
 
 import com.rightmove.es.domain.Property;
-import com.rightmove.es.utils.StretchyUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ public class PropertyServiceTest {
 		property.setIncode("INC");
 		property.setOutcode("OUT");
 		property.setSummary("summary test");
-		property.setLocation(StretchyUtils.getRandomLocation());
 		propertyService.indexProperty(property);
 	}
 
@@ -37,9 +35,13 @@ public class PropertyServiceTest {
 			property.setIncode("AB" + i % 10);
 			property.setOutcode(i % 10 + "CD");
 			property.setSummary("summary test " + i);
-			property.setLocation(StretchyUtils.getRandomLocation());
 			properties.add(property);
 		}
 		propertyService.indexProperties(properties);
+	}
+
+	@Test
+	public void indexAppProperties() throws Exception {
+		propertyService.indexAllProperties();
 	}
 }
