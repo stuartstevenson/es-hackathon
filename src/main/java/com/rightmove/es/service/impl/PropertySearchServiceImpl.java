@@ -143,38 +143,26 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "city"));
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertyType"));
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertySubType"));
-
-		FilterBuilder filterBuilder = FilterBuilders.orFilter(getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "outcode")),
-																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "incode")),
-																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "city")),
-																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "propertyType")),
-																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "propertySubType")));
-
 		
-//		FilterBuilder priceFilter = applyFilterPriceRange(queryBuilder, propertyQueryParams);
-//		if(priceFilter != null) {
-//			filterBuilders.add(priceFilter);
-//
-//		}
+		FilterBuilder priceFilter = applyFilterPriceRange(queryBuilder, propertyQueryParams);
+		if(priceFilter != null) {
+			filterBuilders.add(priceFilter);
+		}
 		
 		if(filterBuilders.size() == 0) {
 			return;
 		}
-
-		queryBuilder.withFilter(filterBuilder);
-	}
-
-	private FilterBuilder getOrFilterBuilderForCollection(Collection<FilterBuilder> filterBuilders) {
+		
 		// this needs refactoring, there must be an easier way to add one filter after the other
 		Object[] array = filterBuilders.toArray();
 		FilterBuilder[] filterBuilderArray= new FilterBuilder[array.length];
-
+		
 		for (int i = 0; i < array.length; i++) {
 			FilterBuilder filter = (FilterBuilder) array[i];
 			filterBuilderArray[i] = filter;
 		}
-
-		return FilterBuilders.orFilter(filterBuilderArray);
+		
+		queryBuilder.withFilter(FilterBuilders.orFilter(filterBuilderArray));
 	}
 
 	private FilterBuilder applyFilterPriceRange(
