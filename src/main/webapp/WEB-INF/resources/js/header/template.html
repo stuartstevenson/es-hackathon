@@ -1,6 +1,14 @@
 <div class="col-xs-12 col-sm-12 col-md-9">
-	<div class="form-group">
-		<input id="searchInput" class="form-control text-center" type="search" name="search" value="{{searchPhrase}}" />
+	<div class="form-group{{#if error}} has-error{{else}}{{#if searchResult}}{{#unless searchResult.properties.totalElements}} has-warning{{/unless}}{{/if}}{{/if}}">
+		<input id="searchInput" class="form-control" type="search" name="search" value="{{searchPhrase}}" />
+		{{#if error}}
+			<label for="searchInput" class="control-label">{{error}}</label>
+		{{/if}}
+		{{#if searchResult}}
+			{{#unless searchResult.properties.totalElements}}
+				<label for="searchInput" class="control-label">Sorry your search returned no results</label>
+			{{/unless}}
+		{{/if}}
 	</div>
 </div>
 <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-3 col-md-offset-0">
@@ -10,8 +18,3 @@
 		</button>
 	</div>
 </div>
-{{#if error}}
-<div id="errorAlert" class="alert alert-danger col-xs-12 col-sm-6 col-sm-offset-3">
-	<p>{{error}}</p>
-</div>
-{{/if}}

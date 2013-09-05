@@ -82,7 +82,6 @@ public class RegionServiceImpl implements RegionService {
 
     private void createIndex() {
         try {
-
             String mapping = jsonBuilder().startObject().startObject("region").startObject("properties")
                     .startObject("polygon")
                     .field("type", "geo_shape")
@@ -92,13 +91,11 @@ public class RegionServiceImpl implements RegionService {
                     .endObject().endObject().endObject().string();
 
             client.admin().indices().delete(new DeleteIndexRequest("region-index")).actionGet().isAcknowledged();
-
             client.admin().indices().create(new CreateIndexRequest("region-index")).actionGet().isAcknowledged();
-
             client.admin().indices().preparePutMapping("region-index").setType("region").setSource(mapping).execute().actionGet().isAcknowledged();
 
         } catch (Exception e) {
-            // ignore
+            throw new RuntimeException("Could not set up region index.", e);
         }
     }
 
