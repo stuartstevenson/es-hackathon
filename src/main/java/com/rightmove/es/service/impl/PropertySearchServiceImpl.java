@@ -1,9 +1,9 @@
 package com.rightmove.es.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.domain.PropertyQueryParams;
+import com.rightmove.es.domain.PropertySearchResult;
+import com.rightmove.es.service.PropertySearchService;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilder;
@@ -16,15 +16,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.FacetedPage;
+import org.springframework.data.elasticsearch.core.FacetedPageImpl;
+import org.springframework.data.elasticsearch.core.facet.FacetResult;
 import org.springframework.data.elasticsearch.core.facet.request.TermFacetRequestBuilder;
+import org.springframework.data.elasticsearch.core.facet.result.Term;
+import org.springframework.data.elasticsearch.core.facet.result.TermResult;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Component;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.domain.PropertySearchResult;
-import com.rightmove.es.service.PropertySearchService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class PropertySearchServiceImpl implements PropertySearchService {
@@ -66,7 +70,38 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		FacetedPage<Property> results = esTemplate.queryForPage(searchQuery, Property.class);
 		long millisSpent = (System.nanoTime() - start) / 1000000;
 
+		results = removeFilteredTermsFromFacet(results, propertyQueryParams);
+
 		return new PropertySearchResult(searchPhrase, millisSpent, results, propertyQueryParams);
+	}
+
+	private FacetedPage<Property> removeFilteredTermsFromFacet(FacetedPage<Property> results, PropertyQueryParams propertyQueryParams) {
+
+		if(propertyQueryParams != null && propertyQueryParams.getFilters() != null && propertyQueryParams.getFilters().size() > 0 && results.hasFacets()) {
+
+			List<FacetResult> facetResultList = new ArrayList<>();
+
+			for (FacetResult facetResult : results.getFacets()) {
+				if ( propertyQueryParams.getFilters(facetResult.getName()) != null && propertyQueryParams.getFilters(facetResult.getName()).size() > 0) {
+					List<Term> termsToRemove = ((TermResult) facetResult).getTerms();
+					List<Term> termsToKeep = new ArrayList<>();
+					for (String selectedFilter : propertyQueryParams.getFilters(facetResult.getName())) {
+						for (Term term : termsToRemove) {
+							if ( term.getTerm().equals(selectedFilter) ) {
+								termsToKeep.add(term);
+							}
+						}
+					}
+					facetResultList.add(new TermResult(facetResult.getName(), termsToKeep));
+				}
+				else {
+					facetResultList.add(facetResult);
+				}
+			}
+
+			return new FacetedPageImpl<Property>(results.getContent(), results.nextPageable(), results.getTotalElements(), facetResultList);
+		}
+		return results;
 	}
 
 	private void applyPaging(PropertyQueryParams propertyQueryParams,
@@ -108,26 +143,38 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "city"));
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertyType"));
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertySubType"));
+
+		FilterBuilder filterBuilder = FilterBuilders.orFilter(getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "outcode")),
+																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "incode")),
+																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "city")),
+																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "propertyType")),
+																getOrFilterBuilderForCollection(applyFilter(queryBuilder, propertyQueryParams, "propertySubType")));
+
 		
-		FilterBuilder priceFilter = applyFilterPriceRange(queryBuilder, propertyQueryParams);
-		if(priceFilter != null) {
-			filterBuilders.add(priceFilter);
-		}
+//		FilterBuilder priceFilter = applyFilterPriceRange(queryBuilder, propertyQueryParams);
+//		if(priceFilter != null) {
+//			filterBuilders.add(priceFilter);
+//
+//		}
 		
 		if(filterBuilders.size() == 0) {
 			return;
 		}
-		
+
+		queryBuilder.withFilter(filterBuilder);
+	}
+
+	private FilterBuilder getOrFilterBuilderForCollection(Collection<FilterBuilder> filterBuilders) {
 		// this needs refactoring, there must be an easier way to add one filter after the other
 		Object[] array = filterBuilders.toArray();
 		FilterBuilder[] filterBuilderArray= new FilterBuilder[array.length];
-		
+
 		for (int i = 0; i < array.length; i++) {
 			FilterBuilder filter = (FilterBuilder) array[i];
 			filterBuilderArray[i] = filter;
 		}
-		
-		queryBuilder.withFilter(FilterBuilders.orFilter(filterBuilderArray));
+
+		return FilterBuilders.orFilter(filterBuilderArray);
 	}
 
 	private FilterBuilder applyFilterPriceRange(
@@ -152,11 +199,11 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	}
 
 	// this needs refactoring, there must be an easier way to add one filter after the other
-	private List<TermFilterBuilder> applyFilter(
+	private List<FilterBuilder> applyFilter(
 			NativeSearchQueryBuilder queryBuilder,
 			PropertyQueryParams propertyQueryParams, String fieldName) {
 		Collection<String> filterValues = propertyQueryParams.getFilters(fieldName);
-		List<TermFilterBuilder> filterBuilders = new ArrayList<TermFilterBuilder>(filterValues.size());
+		List<FilterBuilder> filterBuilders = new ArrayList<FilterBuilder>(filterValues.size());
 
 		for (String value : propertyQueryParams.getFilters(fieldName)) {
 			TermFilterBuilder filter = FilterBuilders.termFilter(fieldName, value);
