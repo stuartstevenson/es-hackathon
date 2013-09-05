@@ -39,9 +39,4 @@ public class PropertyServiceTest {
 		}
 		propertyService.indexProperties(properties);
 	}
-
-	@Test
-	public void indexAppProperties() throws Exception {
-		propertyService.indexAllProperties();
-	}
 }
