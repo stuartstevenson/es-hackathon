@@ -4,6 +4,7 @@ import com.rightmove.es.dao.impl.PropertyDaoImpl;
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.utils.StretchyUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -18,6 +19,7 @@ public class PropertyDaoImplTest {
 	}
 
 	@Test
+	@Ignore
 	public void createAllJSONProperties() {
 		new PropertyDaoImpl().loadPropertiesFromDBAndSaveToJSON();
 		Assert.assertTrue(StretchyUtils.getAllJSONFiles().length > 0);
