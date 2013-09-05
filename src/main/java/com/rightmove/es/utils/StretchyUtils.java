@@ -18,7 +18,7 @@ public class StretchyUtils {
 	}
 
 	public static Double generateRandomBoost() {
-		if(new Random().nextDouble() == 0.5) {
+		if(new Random().nextDouble() <= 0.01) {
 			return 1.05;
 		}
 		return 1.0;
