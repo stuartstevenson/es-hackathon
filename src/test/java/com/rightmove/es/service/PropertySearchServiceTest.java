@@ -2,8 +2,6 @@ package com.rightmove.es.service;
 
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.utils.StretchyUtils;
-import org.elasticsearch.common.geo.GeoPoint;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +18,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
 public class PropertySearchServiceTest {
-
-	private static final GeoPoint randomLocation = StretchyUtils.getRandomLocation();
 
 	@Autowired
 	private PropertySearchService propertySearchService;
@@ -80,15 +76,18 @@ public class PropertySearchServiceTest {
 
 	@Test
 	public void boost() throws Exception{
+
+		propertyService.createIndex();
+
 		indexProperty(1L, "Milton Keynes", "AB1", "DE2", "summary test", null, 1.0);
-		indexProperty(2L, "Milton Keynes", "AB1", "DE3", "this property has 2 staircases", Arrays.asList("walls"), 1.0);
-		indexProperty(3L,"London", "AB1", "NW2", "summary test", null, 1.0);
-		indexProperty(4L,"London", "AB1", "NW1", "summary test", null, null);
-		indexProperty(5L,"London", "AB1", "NW3", "summary test", null, 5.0);
+		indexProperty(2L, "Milton Keynes", "AB1", "DE2", "summary test", null, 2.0);
+		indexProperty(3L,"Milton Keynes","AB1", "DE2", "summary test", null, 3.0);
+		indexProperty(4L,"Milton Keynes","AB1", "DE2", "summary test", null, 4.0);
+		indexProperty(5L,"Milton Keynes","AB1", "DE2", "summary test", null, 5.0);
 
 		Thread.sleep(3000);
 
-		FacetedPage<Property> results = propertySearchService.search("AB1 walls").getProperties();
+		FacetedPage<Property> results = propertySearchService.search("AB1").getProperties();
 
 		assertTrue(results.getContent().get(0).getId().equals(5L));
 
@@ -210,6 +209,8 @@ public class PropertySearchServiceTest {
 		property.setCity(city);
 		property.setSummary(summary);
 		property.setFeatures(features);
+		property.setBoost(boost);
+		property.setPrice(price);
 		propertyService.indexProperty(property);
 	}
 }

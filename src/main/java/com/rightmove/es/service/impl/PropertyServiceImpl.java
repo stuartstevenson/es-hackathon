@@ -50,6 +50,7 @@ public class PropertyServiceImpl implements PropertyService {
 
 		for(Property property : properties) {
 			try {
+				//This is a temp hack to set the boost value on all properties loaded.
 				property.setBoost(StretchyUtils.generateRandomBoost());
 				bulkRequestBuilder.add(new IndexRequest("property-search-index", "rm-property", String.valueOf(property.getId()))
 				.source(mapper.writeValueAsBytes(property)));
