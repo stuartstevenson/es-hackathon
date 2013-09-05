@@ -34,9 +34,6 @@ import java.util.Map;
 public class PropertySearchServiceImpl implements PropertySearchService {
 
 	@Autowired
-	private Client client;
-
-	@Autowired
 	private ElasticsearchTemplate esTemplate;
 
 	@Override

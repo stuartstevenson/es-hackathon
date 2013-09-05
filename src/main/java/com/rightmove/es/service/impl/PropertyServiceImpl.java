@@ -65,7 +65,7 @@ public class PropertyServiceImpl implements PropertyService {
 	@Override
 	public void createIndex() {
 		try {
-			String mapping = jsonBuilder().startObject().startObject("rm-property").startObject("properties")
+			String mapping = jsonBuilder().startObject().startObject("rm-property")
 					.startObject("_boost")
 					.field("name", "boost")
 					.field("null_value", 1.0)
