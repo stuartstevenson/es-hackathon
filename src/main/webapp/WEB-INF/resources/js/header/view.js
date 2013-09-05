@@ -7,28 +7,10 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 			errorAlert: "#errorAlert"
 		},
 		events: {
-			"click #searchButton": function(){
-				if(this.ui.searchBox.val()){
-					this.model.set("searchPhrase", this.ui.searchBox.val(), {
-						silent: true
-					});
-					this.model.unset("error");
-					this.navigate();
-				}
-				else{
-					this.model.unset("searchPhrase", this.ui.searchBox.val(), {
-						silet: true
-					});
-					this.model.set("error", "Woops. Looks like you forgot to enter a search phrase");
-				}
-			},
+			"click #searchButton": this.fireSearchInput,
 			"keypress #searchInput": function(event){
-				if(event.which == 13 && this.ui.searchBox.val()){
-					this.model.set("searchPhrase", this.ui.searchBox.val(), {
-						silent: true
-					});
-					this.model.unset("error");
-					this.navigate();
+				if(event.which == 13 ){
+					this.fireSearchInput();
 				}
 			}
 		},
@@ -39,10 +21,22 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 		setRouter: function(router){
 			this.router = router;
 		},
-		navigate: function(){
-			this.router.navigate("/search?" + this.model.getSearchParamsForURL(), {
-				trigger: true
-			});
+		fireSearchInput: function(){
+			if(this.ui.searchBox.val()){
+				this.model.set("searchPhrase", this.ui.searchBox.val(), {
+					silent: true
+				});
+				this.model.unset("error");
+				this.router.navigate("/search?" + this.model.getSearchParamsForURL(), {
+					trigger: true
+				});
+			}
+			else{
+				this.model.unset("searchPhrase", this.ui.searchBox.val(), {
+					silet: true
+				});
+				this.model.set("error", "Woops. Looks like you forgot to enter a search phrase");
+			}
 		}
 	});
 });

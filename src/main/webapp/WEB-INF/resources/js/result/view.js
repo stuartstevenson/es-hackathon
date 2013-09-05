@@ -1,8 +1,9 @@
-define(["jquery", "underscore", "marionette", "handlebars", "text!result/template.html", "result/isTermActiveHelper"], function($, _, Marionette, Handlebars, template, IsFacetActiveHelper){
+define(["jquery", "underscore", "marionette", "handlebars", "text!result/template.html", "result/isTermActiveHelper", "result/isBoostedHelper"], function($, _, Marionette, Handlebars, template, IsFacetActiveHelper, IsBoostedHelper){
 	return Marionette.ItemView.extend({
 		template: Handlebars.compile(template, {noEscape: true}),
 		initialize: function(){
 			IsFacetActiveHelper.register();
+			IsBoostedHelper.register();
 		},
 		modelEvents: {
 			"change:searchResult": "render"
