@@ -5,3 +5,7 @@
 .capitalize {
 	text-transform: capitalize !important;
 }
+
+.form-inline .form-group.bottom {
+	margin-bottom: 15px;
+}

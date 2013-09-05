@@ -8,6 +8,7 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 		},
 		events: {
 			"click #searchButton": function(){
+				this.model.clearFilters();
 				this.fireSearchInput();
 			},
 			"keypress #searchInput": function(event){
