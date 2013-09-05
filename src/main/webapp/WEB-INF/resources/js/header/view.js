@@ -7,7 +7,9 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 			errorAlert: "#errorAlert"
 		},
 		events: {
-			"click #searchButton": this.fireSearchInput,
+			"click #searchButton": function(){
+				this.fireSearchInput();
+			},
 			"keypress #searchInput": function(event){
 				if(event.which == 13 ){
 					this.fireSearchInput();
