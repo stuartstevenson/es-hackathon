@@ -13,7 +13,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<img id="mainLogo" src="/resources/image/rightmoove-logo.png" alt="Rightmove" />
+					<a href="/"><img id="mainLogo" src="/resources/image/rightmoove-logo.png" alt="Rightmove" /></a>
 				</div>
 			</div>
 			<div class="row" id="headerRegion"></div>
