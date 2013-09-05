@@ -1,6 +1,5 @@
 package com.rightmove.es.domain;
 
-import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -22,7 +21,6 @@ public class Property {
 	private Date firstListingDate;
 	private String incode;
 	private String outcode;
-	private GeoPoint location;
 	private String summary;
 	private String description;
 	private String propertyType;
@@ -178,14 +176,6 @@ public class Property {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public void setLocation(GeoPoint location) {
-		this.location = location;
-	}
-
-	public GeoPoint getLocation() {
-		return location;
 	}
 
 	@Override

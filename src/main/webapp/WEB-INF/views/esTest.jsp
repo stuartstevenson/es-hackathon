@@ -13,6 +13,7 @@
 				</div>
 			</div>
 			<div class="row">
+				Took: ${timeTaken} seconds to index.
 			    ${result}
 			</div>
 		</div>

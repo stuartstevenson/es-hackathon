@@ -7,7 +7,10 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 			errorAlert: "#errorAlert"
 		},
 		events: {
-			"click #searchButton": this.fireSearchInput,
+			"click #searchButton": function(){
+				this.model.clearFilters();
+				this.fireSearchInput();
+			},
 			"keypress #searchInput": function(event){
 				if(event.which == 13 ){
 					this.fireSearchInput();
@@ -18,6 +21,17 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 			"change:error": "render",
 			"change:searchPhrase": "render",
 			"change:searchResult": "render"
+		},
+		onShow: function(){
+			this.focusSearchBoxIfPhraseEmpty();
+		},
+		onRender: function(){
+			this.focusSearchBoxIfPhraseEmpty();
+		},
+		focusSearchBoxIfPhraseEmpty: function(){
+			if(!this.model.has("searchPhrase") || this.model.get("searchPhrase").length == 0){
+				this.ui.searchBox.focus();
+			}
 		},
 		setRouter: function(router){
 			this.router = router;

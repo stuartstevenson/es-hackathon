@@ -1,9 +1,9 @@
 package com.rightmove.es.service;
 
-import java.util.Collection;
-
 import com.rightmove.es.domain.Property;
 import org.elasticsearch.search.SearchHits;
+
+import java.util.Collection;
 
 public interface PropertyService {
 
@@ -12,4 +12,8 @@ public interface PropertyService {
 	void indexProperties(Collection<Property> properties);
 
     Collection<Property> extractProperties(SearchHits searchPhrase);
+
+	void createIndex();
+
+	void indexAllProperties();
 }

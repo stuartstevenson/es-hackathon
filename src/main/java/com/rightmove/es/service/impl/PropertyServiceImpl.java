@@ -1,30 +1,24 @@
 package com.rightmove.es.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-
+import com.rightmove.es.dao.PropertyDao;
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.service.PropertyService;
+import com.rightmove.es.utils.StretchyUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.repositories.PropertyRepository;
-import com.rightmove.es.service.PropertyService;
-
-import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
@@ -32,18 +26,10 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public class PropertyServiceImpl implements PropertyService {
 
 	@Autowired
-	private PropertyRepository propertyRepository;
-
-	@Autowired
-	private ElasticsearchTemplate elasticsearchTemplate;
+	private PropertyDao propertyDao;
 
     @Autowired
     private Client client;
-
-	@PostConstruct
-	public void setUpIndex() {
-		createIndex();
-	}
 
 	@Override
 	public void indexProperty(Property property) {
@@ -64,6 +50,7 @@ public class PropertyServiceImpl implements PropertyService {
 
 		for(Property property : properties) {
 			try {
+				property.setBoost(StretchyUtils.generateRandomBoost());
 				bulkRequestBuilder.add(new IndexRequest("property-search-index", "rm-property", String.valueOf(property.getId()))
 				.source(mapper.writeValueAsBytes(property)));
 			} catch (IOException e) {
@@ -72,17 +59,14 @@ public class PropertyServiceImpl implements PropertyService {
 		}
 
 		if(bulkRequestBuilder.execute().actionGet().hasFailures()) {
-			throw new RuntimeException("Failed to bulk index regions.");
+			throw new RuntimeException("Failed to bulk index properties.");
 		}
 	}
 
-	private void createIndex() {
+	@Override
+	public void createIndex() {
 		try {
-			String mapping = jsonBuilder().startObject().startObject("rm-property").startObject("properties")
-					.startObject("location")
-					.field("type", "geo_point")
-					.endObject()
-					.endObject()
+			String mapping = jsonBuilder().startObject().startObject("rm-property")
 					.startObject("_boost")
 					.field("name", "boost")
 					.field("null_value", 1.0)
@@ -98,7 +82,14 @@ public class PropertyServiceImpl implements PropertyService {
 		}
 	}
 
-    @Override
+	@Override
+	public void indexAllProperties() {
+		for(File jsonFile : StretchyUtils.getAllJSONFiles()) {
+			indexProperties(propertyDao.listAllByFile(jsonFile));
+		}
+	}
+
+	@Override
     public Collection<Property> extractProperties(SearchHits searchHits) {
 
         Collection<Property> propertyCollection = new LinkedHashSet<Property>();
