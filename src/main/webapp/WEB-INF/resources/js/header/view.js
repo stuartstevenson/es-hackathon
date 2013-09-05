@@ -22,6 +22,17 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 			"change:searchPhrase": "render",
 			"change:searchResult": "render"
 		},
+		onShow: function(){
+			this.focusSearchBoxIfPhraseEmpty();
+		},
+		onRender: function(){
+			this.focusSearchBoxIfPhraseEmpty();
+		},
+		focusSearchBoxIfPhraseEmpty: function(){
+			if(!this.model.has("searchPhrase") || this.model.get("searchPhrase").length == 0){
+				this.ui.searchBox.focus();
+			}
+		},
 		setRouter: function(router){
 			this.router = router;
 		},
