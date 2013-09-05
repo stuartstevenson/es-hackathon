@@ -1,9 +1,11 @@
 package com.rightmove.es.controller;
 
-import com.rightmove.es.dataprovider.PropertyDataProvider;
+import com.rightmove.es.dao.PropertyDao;
+import com.rightmove.es.dao.impl.PropertyDaoImpl;
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.repositories.PropertyRepository;
 import com.rightmove.es.service.PropertyService;
+import com.rightmove.es.utils.StretchyUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collection;
+import java.io.File;
 
 @Controller
 public class ESTestController {
@@ -23,13 +25,11 @@ public class ESTestController {
     private PropertyRepository propertyRepository;
     @Autowired
     private PropertyService propertyService;
-	@Autowired
-	private PropertyDataProvider propertyDataProvider;
 
     @RequestMapping("/es-test")
     public String showESTestPage(final ModelMap modelMap) {
 
-        indexDummyData();
+		modelMap.addAttribute("timeTaken", indexDummyData());
 
         modelMap.addAttribute("result",searchDummyData());
 
@@ -43,12 +43,11 @@ public class ESTestController {
        return properties.getContent().toString();
     }
 
-    private void indexDummyData() {
-    	log.info("Loading all properties from XLS");
-		Collection<Property> properties = propertyDataProvider.listAll();
-		log.info("Indexing all properties from XLS...");
-		propertyService.indexProperties(properties);
-		log.info("Indexing XLS finished");
+    private long indexDummyData() {
+		long startTime = System.currentTimeMillis();
+		propertyService.createIndex();
+		propertyService.indexAllProperties();
+		return (System.currentTimeMillis() - startTime) / 1000;
     }
 
 

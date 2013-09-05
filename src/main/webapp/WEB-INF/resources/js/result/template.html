@@ -2,8 +2,38 @@
 	{{#with searchResult}}
 		<div class="col-xs-12">
 			<div class="row">
-				<div class="col-xs-12">
-					<p>Your search took {{tookInMillis}} ms. Your&apos;re welcome. Currently viewing {{properties.number}} - {{properties.numberOfElements}} of {{properties.totalElements}} properties.</p>
+				<div class="col-xs-8">
+					<div class="row">
+						<div class="col-xs-12">
+							<p>Your search took {{tookInMillis}} ms. Your&apos;re welcome. Currently viewing {{properties.number}} - {{properties.numberOfElements}} of {{properties.totalElements}} properties.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-inline text-right" role="form">
+								<div class="form-group bottom">
+									<select id="fieldOrderBy" class="form-control">
+										{{#each ../fieldOrderBy}}
+											<option value="{{value}}"{{#if enabled}} selected{{/if}}>
+												{{name}}
+											</option>
+										{{/each}}
+									</select>
+								</div>
+								<div class="form-group bottom">
+									<select id="directionOrderBy" class="form-control">
+										{{#each ../directionOrderBy}}
+											<option value="{{value}}"{{#if enabled}} selected{{/if}}>
+												{{name}}
+											</option>
+										{{/each}}
+									</select>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="row">
@@ -19,7 +49,7 @@
 							{{#each properties.facets}}
 								{{#if terms}}
 									<li class="list-group-item">
-										<h4 class="capitalize">{{name}}</h4>
+										<h4 class="capitalize list-group-item-heading">{{name}}</h4>
 										<div class="form-group">
 											{{#each terms}}
 												<div class="checkbox">

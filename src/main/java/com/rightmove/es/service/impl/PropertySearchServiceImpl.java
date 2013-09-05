@@ -1,11 +1,10 @@
 package com.rightmove.es.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.domain.PropertyQueryParams;
+import com.rightmove.es.domain.PropertySearchResult;
+import com.rightmove.es.service.PropertySearchService;
 import org.apache.commons.lang.StringUtils;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -16,21 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.FacetedPage;
+import org.springframework.data.elasticsearch.core.FacetedPageImpl;
+import org.springframework.data.elasticsearch.core.facet.FacetResult;
 import org.springframework.data.elasticsearch.core.facet.request.TermFacetRequestBuilder;
+import org.springframework.data.elasticsearch.core.facet.result.Term;
+import org.springframework.data.elasticsearch.core.facet.result.TermResult;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Component;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.domain.PropertySearchResult;
-import com.rightmove.es.service.PropertySearchService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Component
 public class PropertySearchServiceImpl implements PropertySearchService {
-
-	@Autowired
-	private Client client;
 
 	@Autowired
 	private ElasticsearchTemplate esTemplate;
@@ -44,8 +43,8 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	public PropertySearchResult search(String searchPhrase, PropertyQueryParams propertyQueryParams) {
 		NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder(); 
 		queryBuilder.withQuery(QueryBuilders.multiMatchQuery(searchPhrase)
-				.field("incode", 100.0f)
-				.field("outcode", 80.0f)
+				.field("incode", 80.0f)
+				.field("outcode", 90.0f)
 				.field("city", 90.0f)
 				.field("summary", 0.3f)
 				.field("description", 0.2f)
@@ -66,7 +65,38 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		FacetedPage<Property> results = esTemplate.queryForPage(searchQuery, Property.class);
 		long millisSpent = (System.nanoTime() - start) / 1000000;
 
+		results = removeFilteredTermsFromFacet(results, propertyQueryParams);
+
 		return new PropertySearchResult(searchPhrase, millisSpent, results, propertyQueryParams);
+	}
+
+	private FacetedPage<Property> removeFilteredTermsFromFacet(FacetedPage<Property> results, PropertyQueryParams propertyQueryParams) {
+
+		if(propertyQueryParams != null && propertyQueryParams.getFilters() != null && propertyQueryParams.getFilters().size() > 0 && results.hasFacets()) {
+
+			List<FacetResult> facetResultList = new ArrayList<>();
+
+			for (FacetResult facetResult : results.getFacets()) {
+				if ( propertyQueryParams.getFilters(facetResult.getName()) != null && propertyQueryParams.getFilters(facetResult.getName()).size() > 0) {
+					List<Term> termsToRemove = ((TermResult) facetResult).getTerms();
+					List<Term> termsToKeep = new ArrayList<>();
+					for (String selectedFilter : propertyQueryParams.getFilters(facetResult.getName())) {
+						for (Term term : termsToRemove) {
+							if ( term.getTerm().equals(selectedFilter) ) {
+								termsToKeep.add(term);
+							}
+						}
+					}
+					facetResultList.add(new TermResult(facetResult.getName(), termsToKeep));
+				}
+				else {
+					facetResultList.add(facetResult);
+				}
+			}
+
+			return new FacetedPageImpl<Property>(results.getContent(), results.nextPageable(), results.getTotalElements(), facetResultList);
+		}
+		return results;
 	}
 
 	private void applyPaging(PropertyQueryParams propertyQueryParams,
@@ -80,7 +110,7 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	private void applyOrderBy(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyQueryParams) {
 		if(!StringUtils.isEmpty(propertyQueryParams.getFieldOrderBy())) {
 			FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(propertyQueryParams.getFieldOrderBy());
-			if("DESC".equals(propertyQueryParams.getDirectionOrderBy())) {
+			if("desc".equals(propertyQueryParams.getDirectionOrderBy())) {
 				fieldSortBuilder.order(SortOrder.DESC);
 			}
 			queryBuilder.withSort(fieldSortBuilder);
@@ -152,11 +182,11 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 	}
 
 	// this needs refactoring, there must be an easier way to add one filter after the other
-	private List<TermFilterBuilder> applyFilter(
+	private List<FilterBuilder> applyFilter(
 			NativeSearchQueryBuilder queryBuilder,
 			PropertyQueryParams propertyQueryParams, String fieldName) {
 		Collection<String> filterValues = propertyQueryParams.getFilters(fieldName);
-		List<TermFilterBuilder> filterBuilders = new ArrayList<TermFilterBuilder>(filterValues.size());
+		List<FilterBuilder> filterBuilders = new ArrayList<FilterBuilder>(filterValues.size());
 
 		for (String value : propertyQueryParams.getFilters(fieldName)) {
 			TermFilterBuilder filter = FilterBuilders.termFilter(fieldName, value);

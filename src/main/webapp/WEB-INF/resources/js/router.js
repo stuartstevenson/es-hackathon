@@ -23,6 +23,20 @@ define(["backbone", "underscore"], function (Backbone, _) {
 				this.options.model.set("searchPhrase", params.searchPhrase);
 			}
 
+			if(params.fieldOrderBy){
+				var fieldOrderByClone = this.options.model.get("fieldOrderBy");
+				_.findWhere(fieldOrderByClone, {enabled: true}).enabled = false;
+				_.findWhere(fieldOrderByClone, {value: params.fieldOrderBy}).enabled = true;
+				this.options.model.set("fieldOrderby", fieldOrderByClone);
+			}
+
+			if(params.directionOrderBy){
+				var directionOrderByClone = this.options.model.get("directionOrderBy");
+				_.findWhere(directionOrderByClone, {enabled: true}).enabled = false;
+				_.findWhere(directionOrderByClone, {value: params.directionOrderBy}).enabled = true;
+				this.options.model.set("directionOrderBy", directionOrderByClone);
+			}
+
 			if(params.outcode){
 				this.options.model.set("filters.outcode", params.outcode.split(","));
 			}

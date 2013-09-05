@@ -1,23 +1,21 @@
 package com.rightmove.es.service;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.domain.PropertyQueryParams;
+import com.rightmove.es.utils.StretchyUtils;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.FacetedPage;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.utils.StretchyUtils;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
@@ -30,9 +28,6 @@ public class PropertySearchServiceTest {
 
 	@Autowired
 	private PropertyService propertyService;
-
-	@Autowired
-	private ElasticsearchTemplate esTemplate;
 
 	@Test
 	public void getSearchResultFilteredWithFacets() throws InterruptedException {
@@ -215,9 +210,6 @@ public class PropertySearchServiceTest {
 		property.setCity(city);
 		property.setSummary(summary);
 		property.setFeatures(features);
-		property.setLocation(StretchyUtils.getRandomLocation());
-		property.setBoost(boost);
-		property.setPrice(price);
 		propertyService.indexProperty(property);
 	}
 }
