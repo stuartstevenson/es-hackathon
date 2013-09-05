@@ -26,6 +26,8 @@ public class SearchController {
     		@RequestParam(required = false) Collection<String> city,
     		@RequestParam(required = false) Collection<String> propertyType,
     		@RequestParam(required = false) Collection<String> propertySubType,
+    		@RequestParam(required = false) Double priceMin,
+    		@RequestParam(required = false) Double priceMax,
     		@RequestParam(required = false) String fieldOrderBy,
     		@RequestParam(required = false) String directionOrderBy) {
         
@@ -35,6 +37,8 @@ public class SearchController {
     	propertyQueryParams.addFilters("city", city);
     	propertyQueryParams.addFilters("propertyType", propertyType);
     	propertyQueryParams.addFilters("propertySubType", propertySubType);
+    	propertyQueryParams.setPriceMin(priceMin);
+    	propertyQueryParams.setPriceMax(priceMax);
     	propertyQueryParams.setFieldOrderBy(fieldOrderBy);
     	propertyQueryParams.setDirectionOrderBy(directionOrderBy);
 		return propertySearchService.search(searchPhrase, propertyQueryParams);

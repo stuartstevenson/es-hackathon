@@ -11,6 +11,8 @@ public class PropertyQueryParams {
 	private Map<String, Collection<String>> filters;
 	private String fieldOrderBy;
     private String directionOrderBy;
+    private Double priceMin;
+    private Double priceMax;
 
 	public PropertyQueryParams() {
 		filters = new HashMap<String, Collection<String>>();
@@ -61,4 +63,21 @@ public class PropertyQueryParams {
 	public Map<String, Collection<String>> getFilters() {
 		return filters;
 	}
+
+	public Double getPriceMin() {
+		return priceMin;
+	}
+
+	public void setPriceMin(Double priceMin) {
+		this.priceMin = priceMin;
+	}
+
+	public Double getPriceMax() {
+		return priceMax;
+	}
+
+	public void setPriceMax(Double priceMax) {
+		this.priceMax = priceMax;
+	}
+
 }

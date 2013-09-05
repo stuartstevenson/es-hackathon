@@ -1,9 +1,12 @@
 package com.rightmove.es.service;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.utils.StretchyUtils;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.elasticsearch.common.geo.GeoPoint;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,9 @@ import org.springframework.data.elasticsearch.core.FacetedPage;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.domain.PropertyQueryParams;
+import com.rightmove.es.utils.StretchyUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
@@ -133,12 +135,39 @@ public class PropertySearchServiceTest {
 			System.out.println(property);
 		}
 	}
+	
+	@Test
+	public void priceRange() throws InterruptedException {
+		
+		indexPropertyWithPrice(1L, "PPP", 1000.0);
+		indexPropertyWithPrice(2L, "PPP", 2000.0);
+		indexPropertyWithPrice(3L, "PPP", 3000.0);
+		
+		Thread.sleep(2000L);
+		
+		PropertyQueryParams propertyFilter = new PropertyQueryParams();
+		propertyFilter.setPriceMin(1500.0);
+		propertyFilter.setPriceMax(3500.0);
+		FacetedPage<Property> results = propertySearchService.search("PPP", propertyFilter).getProperties();
+		Assert.assertEquals(2, results.getNumberOfElements());
+		for (Property property : results) {
+			System.out.println(property);
+		}
+	}
 
 	public void indexProperty(Long id, String city, String incode) {
-		indexProperty(id, city, "OUT", incode, "summary test", null, null);
+		indexProperty(id, city, "OUT", incode, "summary test", null, null, null);
+	}
+	
+	public void indexPropertyWithPrice(Long id, String incode, Double price) {
+		indexProperty(id, "London", "OUT", incode, "summary test", null, price, null);
 	}
 	
 	public void indexProperty(Long id, String city, String outcode, String incode, String summary, List<String> features, Double boost) {
+		indexProperty(id, city, outcode, incode, summary, null, null, boost);
+	}
+	
+	public void indexProperty(Long id, String city, String outcode, String incode, String summary, List<String> features, Double price, Double boost) {
 		Property property = new Property();
 		property.setId(id);
 		property.setIncode(incode);
@@ -148,6 +177,7 @@ public class PropertySearchServiceTest {
 		property.setFeatures(features);
 		property.setLocation(StretchyUtils.getRandomLocation());
 		property.setBoost(boost);
+		property.setPrice(price);
 		propertyService.indexProperty(property);
 	}
 }

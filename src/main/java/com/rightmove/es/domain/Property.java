@@ -15,7 +15,7 @@ public class Property {
 	private Long id;
     @Version
     private Long version;
-	private Long price;
+	private Double price;
 	private Long bedrooms;
 	private String address;
 	private String city;
@@ -90,11 +90,11 @@ public class Property {
 		this.numberOfVirtualTours = numberOfVirtualTours;
 	}
 
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

@@ -1,9 +1,8 @@
 package com.rightmove.es.service.impl;
 
-import com.rightmove.es.domain.Property;
-import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.domain.PropertySearchResult;
-import com.rightmove.es.service.PropertySearchService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.client.Client;
@@ -21,9 +20,10 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.rightmove.es.domain.Property;
+import com.rightmove.es.domain.PropertyQueryParams;
+import com.rightmove.es.domain.PropertySearchResult;
+import com.rightmove.es.service.PropertySearchService;
 
 @Component
 public class PropertySearchServiceImpl implements PropertySearchService {
@@ -54,7 +54,7 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 
 		applyFilters(queryBuilder, propertyQueryParams);
 		defineFacets(queryBuilder);
-		applyOrderBy(propertyQueryParams, queryBuilder);
+		applyOrderBy(queryBuilder, propertyQueryParams);
 		
 		SearchQuery searchQuery = queryBuilder.build();
 
@@ -65,8 +65,7 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		return new PropertySearchResult(searchPhrase, millisSpent, results, propertyQueryParams);
 	}
 
-	private void applyOrderBy(PropertyQueryParams propertyQueryParams,
-			NativeSearchQueryBuilder queryBuilder) {
+	private void applyOrderBy(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyQueryParams) {
 		if(propertyQueryParams != null && !StringUtils.isEmpty(propertyQueryParams.getFieldOrderBy())) {
 			FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(propertyQueryParams.getFieldOrderBy());
 			if("DESC".equals(propertyQueryParams.getDirectionOrderBy())) {
@@ -97,7 +96,15 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "city"));
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertyType"));
 		filterBuilders.addAll(applyFilter(queryBuilder, propertyQueryParams, "propertySubType"));
-		// filber also by features?
+		
+		FilterBuilder priceFilter = applyFilterPriceRange(queryBuilder, propertyQueryParams);
+		if(priceFilter != null) {
+			filterBuilders.add(priceFilter);
+		}
+		
+		if(filterBuilders.size() == 0) {
+			return;
+		}
 		
 		// this needs refactoring, there must be an easier way to add one filter after the other
 		Object[] array = filterBuilders.toArray();
@@ -109,6 +116,27 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		}
 		
 		queryBuilder.withFilter(FilterBuilders.orFilter(filterBuilderArray));
+	}
+
+	private FilterBuilder applyFilterPriceRange(
+			NativeSearchQueryBuilder queryBuilder,
+			PropertyQueryParams propertyQueryParams) {
+		
+		Double priceMin = propertyQueryParams.getPriceMin();
+		Double priceMax = propertyQueryParams.getPriceMax();
+		
+		if(priceMin == null || priceMax == null || priceMax < priceMin) {
+			return null;
+		}
+		
+		FilterBuilder filter = FilterBuilders
+				.rangeFilter("price")
+				.from(priceMin)
+				.to(priceMax)
+				.includeLower(true)
+				.includeUpper(true);
+		
+		return filter;
 	}
 
 	// this needs refactoring, there must be an easier way to add one filter after the other

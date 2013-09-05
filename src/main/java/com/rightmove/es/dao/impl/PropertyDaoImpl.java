@@ -46,7 +46,7 @@ public class PropertyDaoImpl implements PropertyDao {
 			property.setOutcode(row.getCell(0).getStringCellValue());
 			property.setIncode(row.getCell(1).getStringCellValue());
 			property.setId((long) row.getCell(2).getNumericCellValue());
-			property.setPrice((long) row.getCell(3).getNumericCellValue());
+			property.setPrice((double) row.getCell(3).getNumericCellValue());
 			property.setBedrooms((long) row.getCell(4).getNumericCellValue());
 			property.setAddress(row.getCell(5).getStringCellValue());
 			property.setCity(row.getCell(6).getStringCellValue());
