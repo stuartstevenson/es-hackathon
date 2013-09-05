@@ -2,6 +2,7 @@ package com.rightmove.es.dao.impl;
 
 import com.rightmove.es.dao.PropertyDao;
 import com.rightmove.es.domain.Property;
+import com.rightmove.es.utils.StretchyUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -45,30 +46,33 @@ public class PropertyDaoImpl implements PropertyDao {
 			property.setOutcode(row.getCell(0).getStringCellValue());
 			property.setIncode(row.getCell(1).getStringCellValue());
 			property.setId((long) row.getCell(2).getNumericCellValue());
-			property.setPrice((long) row.getCell(3).getNumericCellValue());
+			property.setPrice((double) row.getCell(3).getNumericCellValue());
 			property.setBedrooms((long) row.getCell(4).getNumericCellValue());
-			property.setFirstListingDate(row.getCell(5).getDateCellValue());
-			property.setSummary(row.getCell(6).getStringCellValue());
-			property.setDescription(row.getCell(7).getStringCellValue());
-			property.setPropertyType(row.getCell(8).getStringCellValue());
-			property.setPropertySubType(row.getCell(9).getStringCellValue());
-			property.setFeatures(Lists.newArrayList(row.getCell(10).getStringCellValue().split("\\^")));
+			property.setAddress(row.getCell(5).getStringCellValue());
+			property.setCity(row.getCell(6).getStringCellValue());
+			property.setFirstListingDate(row.getCell(7).getDateCellValue());
+			property.setSummary(row.getCell(8).getStringCellValue());
+			property.setDescription(row.getCell(9).getStringCellValue());
+			property.setPropertyType(row.getCell(10).getStringCellValue());
+			property.setPropertySubType(row.getCell(11).getStringCellValue());
+			property.setFeatures(Lists.newArrayList(row.getCell(12).getStringCellValue().split("\\^")));
 
-			/*property.setLocation(new PointImpl(
-					row.getCell(11).getNumericCellValue(),
-					row.getCell(12).getNumericCellValue(),
-					SpatialContext.GEO
+/*			property.setLocation(new GeoPoint(
+					row.getCell(13).getNumericCellValue(),
+					row.getCell(14).getNumericCellValue()
 			));*/
 
+			property.setLocation(StretchyUtils.getRandomLocation());
+
 			property.setImageUrls(Lists.newArrayList(
-						row.getCell(13).getStringCellValue().split(";")[1],
-						row.getCell(14).getStringCellValue().split(";")[1],
-						row.getCell(15).getStringCellValue().split(";")[1]
+						row.getCell(15).getStringCellValue().split(";")[1],
+						row.getCell(16).getStringCellValue().split(";")[1],
+						row.getCell(17).getStringCellValue().split(";")[1]
 			));
 
-			property.setNumberOfImages((long) row.getCell(16).getNumericCellValue());
-			property.setNumberOfFloorplans((long) row.getCell(17).getNumericCellValue());
-			property.setNumberOfVirtualTours((long) row.getCell(18).getNumericCellValue());
+			property.setNumberOfImages((long) row.getCell(18).getNumericCellValue());
+			property.setNumberOfFloorplans((long) row.getCell(19).getNumericCellValue());
+			property.setNumberOfVirtualTours((long) row.getCell(20).getNumericCellValue());
 
 			properties.add(property);
 		}

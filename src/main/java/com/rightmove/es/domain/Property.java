@@ -1,6 +1,6 @@
 package com.rightmove.es.domain;
 
-import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -15,11 +15,14 @@ public class Property {
 	private Long id;
     @Version
     private Long version;
-	private Long price;
+	private Double price;
 	private Long bedrooms;
+	private String address;
+	private String city;
 	private Date firstListingDate;
 	private String incode;
 	private String outcode;
+	private GeoPoint location;
 	private String summary;
 	private String description;
 	private String propertyType;
@@ -29,6 +32,31 @@ public class Property {
 	private Long numberOfImages;
 	private Long numberOfFloorplans;
 	private Long numberOfVirtualTours;
+	private Double boost;
+
+	public Double getBoost() {
+		return boost;
+	}
+
+	public void setBoost(Double boost) {
+		this.boost = boost;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public Long getNumberOfImages() {
 		return numberOfImages;
@@ -62,11 +90,11 @@ public class Property {
 		this.numberOfVirtualTours = numberOfVirtualTours;
 	}
 
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
@@ -152,10 +180,26 @@ public class Property {
 		this.description = description;
 	}
 
+	public void setLocation(GeoPoint location) {
+		this.location = location;
+	}
+
+	public GeoPoint getLocation() {
+		return location;
+	}
+
 	@Override
 	public String toString() {
-		return "Property [id=" + id + ", incode=" + incode + ", outcode="
-				+ outcode + ", summary=" + StringUtils.substring(summary, 0, 7) + "...]"; // StringUtils avoids null pointer
+		return "Property [id=" + id + ", version=" + version + ", price="
+				+ price + ", bedrooms=" + bedrooms + ", address=" + address
+				+ ", firstListingDate=" + firstListingDate + ", incode="
+				+ incode + ", outcode=" + outcode + ", city=" + city
+				+ ", summary=" + summary + ", description=" + description
+				+ ", propertyType=" + propertyType + ", propertySubType="
+				+ propertySubType + ", features=" + features + ", imageUrls="
+				+ imageUrls + ", numberOfImages=" + numberOfImages
+				+ ", numberOfFloorplans=" + numberOfFloorplans
+				+ ", numberOfVirtualTours=" + numberOfVirtualTours + "]";
 	}
 
 }
