@@ -40,11 +40,6 @@ public class PropertyServiceImpl implements PropertyService {
     @Autowired
     private Client client;
 
-	@PostConstruct
-	public void setUpIndex() {
-		createIndex();
-	}
-
 	@Override
 	public void indexProperty(Property property) {
 		try {
@@ -76,7 +71,8 @@ public class PropertyServiceImpl implements PropertyService {
 		}
 	}
 
-	private void createIndex() {
+	@Override
+	public void createIndex() {
 		try {
 			String mapping = jsonBuilder().startObject().startObject("rm-property").startObject("properties")
 					.startObject("location")
