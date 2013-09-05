@@ -76,15 +76,18 @@ public class PropertySearchServiceTest {
 
 	@Test
 	public void boost() throws Exception{
+
+		propertyService.createIndex();
+
 		indexProperty(1L, "Milton Keynes", "AB1", "DE2", "summary test", null, 1.0);
-		indexProperty(2L, "Milton Keynes", "AB1", "DE3", "this property has 2 staircases", Arrays.asList("walls"), 1.0);
-		indexProperty(3L,"London", "AB1", "NW2", "summary test", null, 1.0);
-		indexProperty(4L,"London", "AB1", "NW1", "summary test", null, null);
-		indexProperty(5L,"London", "AB1", "NW3", "summary test", null, 5.0);
+		indexProperty(2L, "Milton Keynes", "AB1", "DE2", "summary test", null, 2.0);
+		indexProperty(3L,"Milton Keynes","AB1", "DE2", "summary test", null, 3.0);
+		indexProperty(4L,"Milton Keynes","AB1", "DE2", "summary test", null, 4.0);
+		indexProperty(5L,"Milton Keynes","AB1", "DE2", "summary test", null, 5.0);
 
 		Thread.sleep(3000);
 
-		FacetedPage<Property> results = propertySearchService.search("AB1 walls").getProperties();
+		FacetedPage<Property> results = propertySearchService.search("AB1").getProperties();
 
 		assertTrue(results.getContent().get(0).getId().equals(5L));
 
@@ -206,6 +209,8 @@ public class PropertySearchServiceTest {
 		property.setCity(city);
 		property.setSummary(summary);
 		property.setFeatures(features);
+		property.setBoost(boost);
+		property.setPrice(price);
 		propertyService.indexProperty(property);
 	}
 }
