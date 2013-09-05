@@ -16,7 +16,8 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 		},
 		modelEvents: {
 			"change:error": "render",
-			"change:searchPhrase": "render"
+			"change:searchPhrase": "render",
+			"change:searchResult": "render"
 		},
 		setRouter: function(router){
 			this.router = router;
