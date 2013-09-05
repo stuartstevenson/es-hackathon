@@ -29,7 +29,12 @@ define(["jquery", "underscore", "marionette", "handlebars", "text!result/templat
 			}
 			else if(!isChecked){
 				var newFilterList = _.without(this.model.get("filters." + facetName), $input.val());
-				this.model.set("filters." + facetName, newFilterList);
+				if(newFilterList.length > 0){
+					this.model.set("filters." + facetName, newFilterList);
+				}
+				else{
+					this.model.unset("filters." + facetName);
+				}
 			}
 		},
 		filterUpdate: function(){
