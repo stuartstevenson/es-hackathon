@@ -50,6 +50,7 @@ public class PropertyServiceImpl implements PropertyService {
 
 		for(Property property : properties) {
 			try {
+				property.setBoost(StretchyUtils.generateRandomBoost());
 				bulkRequestBuilder.add(new IndexRequest("property-search-index", "rm-property", String.valueOf(property.getId()))
 				.source(mapper.writeValueAsBytes(property)));
 			} catch (IOException e) {

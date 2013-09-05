@@ -83,7 +83,7 @@ public class PropertyDaoImpl implements PropertyDao {
 				property.setNumberOfImages(resultSet.getLong(19));
 				property.setNumberOfFloorplans(resultSet.getLong(20));
 				property.setNumberOfVirtualTours(resultSet.getLong(21));
-				property.setBoost(StretchyUtils.generateBoost());
+				property.setBoost(StretchyUtils.generateRandomBoost());
 
 				properties.add(property);
 

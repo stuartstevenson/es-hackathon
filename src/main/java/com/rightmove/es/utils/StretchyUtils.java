@@ -17,9 +17,9 @@ public class StretchyUtils {
 		return new GeoPoint(latitude, longitude);
 	}
 
-	public static Double generateBoost() {
-		if(new Random().nextDouble() > 0.99) {
-			return 1.25;
+	public static Double generateRandomBoost() {
+		if(new Random().nextDouble() == 0.5) {
+			return 1.05;
 		}
 		return 1.0;
 	}
