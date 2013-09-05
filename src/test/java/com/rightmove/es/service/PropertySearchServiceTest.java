@@ -2,8 +2,6 @@ package com.rightmove.es.service;
 
 import com.rightmove.es.domain.Property;
 import com.rightmove.es.domain.PropertyQueryParams;
-import com.rightmove.es.utils.StretchyUtils;
-import org.elasticsearch.common.geo.GeoPoint;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +18,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/applicationContext.xml")
 public class PropertySearchServiceTest {
-
-	private static final GeoPoint randomLocation = StretchyUtils.getRandomLocation();
 
 	@Autowired
 	private PropertySearchService propertySearchService;
