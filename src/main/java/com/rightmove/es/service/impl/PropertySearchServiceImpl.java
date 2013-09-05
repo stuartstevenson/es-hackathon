@@ -13,6 +13,7 @@ import org.elasticsearch.index.query.TermFilterBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.FacetedPage;
 import org.springframework.data.elasticsearch.core.facet.request.TermFacetRequestBuilder;
@@ -52,9 +53,12 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 				.field("propertySubType", 2.0f)
 				.field("features", 1.0f));
 
-		applyFilters(queryBuilder, propertyQueryParams);
-		defineFacets(queryBuilder);
-		applyOrderBy(queryBuilder, propertyQueryParams);
+		if(propertyQueryParams != null) {
+			applyFilters(queryBuilder, propertyQueryParams);
+			defineFacets(queryBuilder);
+			applyOrderBy(queryBuilder, propertyQueryParams);
+			applyPaging(propertyQueryParams, queryBuilder);
+		}
 		
 		SearchQuery searchQuery = queryBuilder.build();
 
@@ -65,8 +69,16 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 		return new PropertySearchResult(searchPhrase, millisSpent, results, propertyQueryParams);
 	}
 
+	private void applyPaging(PropertyQueryParams propertyQueryParams,
+			NativeSearchQueryBuilder queryBuilder) {
+		if(propertyQueryParams.getPageNumber() != null && propertyQueryParams.getPageSize() != null
+				&& propertyQueryParams.getPageNumber() >= 0 && propertyQueryParams.getPageSize() >= 1) {
+			queryBuilder.withPageable(new PageRequest(propertyQueryParams.getPageNumber(), propertyQueryParams.getPageSize()));
+		}
+	}
+
 	private void applyOrderBy(NativeSearchQueryBuilder queryBuilder, PropertyQueryParams propertyQueryParams) {
-		if(propertyQueryParams != null && !StringUtils.isEmpty(propertyQueryParams.getFieldOrderBy())) {
+		if(!StringUtils.isEmpty(propertyQueryParams.getFieldOrderBy())) {
 			FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(propertyQueryParams.getFieldOrderBy());
 			if("DESC".equals(propertyQueryParams.getDirectionOrderBy())) {
 				fieldSortBuilder.order(SortOrder.DESC);

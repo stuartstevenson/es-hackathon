@@ -28,6 +28,8 @@ public class SearchController {
     		@RequestParam(required = false) Collection<String> propertySubType,
     		@RequestParam(required = false) Double priceMin,
     		@RequestParam(required = false) Double priceMax,
+    		@RequestParam(required = false) Integer pageSize,
+    		@RequestParam(required = false) Integer pageNumber,
     		@RequestParam(required = false) String fieldOrderBy,
     		@RequestParam(required = false) String directionOrderBy) {
         
@@ -39,7 +41,9 @@ public class SearchController {
     	propertyQueryParams.addFilters("propertySubType", propertySubType);
     	propertyQueryParams.setPriceMin(priceMin);
     	propertyQueryParams.setPriceMax(priceMax);
+    	propertyQueryParams.setPageSize(pageSize);
     	propertyQueryParams.setFieldOrderBy(fieldOrderBy);
+    	propertyQueryParams.setPageNumber(pageNumber);
     	propertyQueryParams.setDirectionOrderBy(directionOrderBy);
 		return propertySearchService.search(searchPhrase, propertyQueryParams);
     }

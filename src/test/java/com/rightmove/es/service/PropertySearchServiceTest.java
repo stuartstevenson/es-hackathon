@@ -154,6 +154,46 @@ public class PropertySearchServiceTest {
 			System.out.println(property);
 		}
 	}
+	
+	@Test
+	public void paging() throws InterruptedException {
+		
+		indexProperty(1L, "ccccccc", "AB1", "DE2", "summary test", null, null);
+		indexProperty(2L, "bbbbbbb", "AB1", "DE2", "summary test", null, null);
+		indexProperty(3L, "aaaaaaa", "AB1", "DE2", "summary test", null, null);
+		indexProperty(4L, "hhhhhhh", "AB1", "DE2", "summary test", null, null);
+		indexProperty(5L, "ddddddd", "AB1", "DE2", "summary test", null, null);
+		indexProperty(6L, "fffffff", "AB1", "DE2", "summary test", null, null);
+		indexProperty(7L, "iiiiiii", "AB1", "DE2", "summary test", null, null);
+		
+		Thread.sleep(2000L);
+		
+		PropertyQueryParams propertyQueryParams = new PropertyQueryParams();
+		propertyQueryParams.addFilter("outcode", "AB1");
+		propertyQueryParams.setDirectionOrderBy("ASC");
+		propertyQueryParams.setFieldOrderBy("city");
+		propertyQueryParams.setPageNumber(3);
+		propertyQueryParams.setPageSize(2);
+		FacetedPage<Property> results = propertySearchService.search("DE2", propertyQueryParams).getProperties();
+		Assert.assertEquals(1, results.getNumberOfElements());
+		for (Property property : results) {
+			System.out.println(property);
+		}
+		Assert.assertEquals(new Long(7L), results.getContent().get(0).getId());
+
+		propertyQueryParams.setPageNumber(4);
+		results = propertySearchService.search("DE2", propertyQueryParams).getProperties();
+		Assert.assertEquals(0, results.getNumberOfElements());
+		
+		propertyQueryParams.setPageNumber(1);
+		results = propertySearchService.search("DE2", propertyQueryParams).getProperties();
+		Assert.assertEquals(2, results.getNumberOfElements());
+		for (Property property : results) {
+			System.out.println(property);
+		}
+		Assert.assertEquals(new Long(1L), results.getContent().get(0).getId());
+		Assert.assertEquals(new Long(5L), results.getContent().get(1).getId());
+	}
 
 	public void indexProperty(Long id, String city, String incode) {
 		indexProperty(id, city, "OUT", incode, "summary test", null, null, null);
