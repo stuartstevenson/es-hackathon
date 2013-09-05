@@ -1,3 +1,7 @@
+#mainLogo {
+	padding: 2em 0;
+}
+
 .capitalize {
 	text-transform: capitalize !important;
 }
