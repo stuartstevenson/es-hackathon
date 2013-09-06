@@ -46,11 +46,11 @@ public class PropertySearchServiceImpl implements PropertySearchService {
 				.field("incode", 80.0f)
 				.field("outcode", 90.0f)
 				.field("city", 90.0f)
-				.field("summary", 0.3f)
+				.field("summary", 1.0f)
 				.field("description", 0.2f)
 				.field("propertyType", 1.5f)
 				.field("propertySubType", 2.0f)
-				.field("features", 1.0f));
+				.field("features", 0.3f));
 
 		if(propertyQueryParams != null) {
 			applyFilters(queryBuilder, propertyQueryParams);
