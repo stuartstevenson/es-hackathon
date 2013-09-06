@@ -9,3 +9,9 @@
 .form-inline .form-group.bottom {
 	margin-bottom: 15px;
 }
+
+.text-ellipsis {
+	max-width: 100%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}

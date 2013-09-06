@@ -93,7 +93,18 @@
 											<img src="http://media.rightmove.co.uk/{{imageUrls.[0]}}" class="img-thumbnail" />
 										</div>
 										<div class="col-xs-8">
-											<p>{{summary}}</p>
+											<div class="row">
+												<div class="col-xs-12">
+													<p>{{summary}}</p>
+												</div>
+												<div class="col-xs-12">
+													<ul class="list-inline list-unstyled">
+														{{#each features}}
+														<li class="badge text-ellipsis">{{this}}</li>
+														{{/each}}
+													</ul>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
