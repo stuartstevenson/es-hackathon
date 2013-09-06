@@ -8,7 +8,6 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 		},
 		events: {
 			"click #searchButton": function(){
-				this.model.clearFilters();
 				this.fireSearchInput();
 			},
 			"keypress #searchInput": function(event){
@@ -41,6 +40,7 @@ define(["jquery", "marionette", "handlebars", "text!header/template.html"], func
 				this.model.set("searchPhrase", this.ui.searchBox.val(), {
 					silent: true
 				});
+				this.model.clearFilters();
 				this.model.unset("error");
 				this.router.navigate("/search?" + this.model.getSearchParamsForURL(), {
 					trigger: true
